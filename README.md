@@ -2,7 +2,7 @@
 
 ## This repo
 
-Group members:
+Group 3 members:
 
 - Nguyễn Vĩnh An
 - Đoàn Hữu Bách
