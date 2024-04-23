@@ -4,7 +4,7 @@
 
 Group 3 members:
 
-- Nguyễn Vĩnh An
+- Nguyễn Vĩnh An: [Exercise repo](https://github.com/Bill-GD/php_course.git)
 - Đoàn Hữu Bách
 - Dương Đức Bình
 
