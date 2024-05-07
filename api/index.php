@@ -5,6 +5,6 @@
     <title>Document</title>
   </head>
   <body>
-    Empty for now
+    Empty index.php in /api
   </body>
 </html>
