@@ -5,6 +5,6 @@
     <title>Document</title>
   </head>
   <body>
-    Empty for now
+    Empty for now (from root directory)
   </body>
 </html>
