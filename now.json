@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "functions": {
+    "api/app/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "api/public/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 <?php
 
-echo "Test Environment Variables <br>";
+print_r( get_loaded_extensions());
+echo "<br>";
 
 $aiven_username = getenv("AivenUsername");
 $aiven_password = getenv("AivenPassword");
@@ -13,17 +14,15 @@ $fields = parse_url($uri);
 $conn = "mysql:";
 $conn .= "host=" . $fields["host"];
 $conn .= ";port=" . $fields["port"];
-$conn .= ";dbname=issue_tracker_db";
+;
+$conn .= ";dbname=defaultdb";
 $conn .= ";sslmode=verify-ca;sslrootcert=ca.pem";
 
 try {
   $db = new PDO($conn, $fields["user"], $fields["pass"]);
 
-  $stmt = $db->query("describe test");
-  print_r($stmt->fetchall());
+  $stmt = $db->query("SELECT VERSION()");
+  print ($stmt->fetch()[0]);
 } catch (Exception $e) {
   echo "Error: " . $e->getMessage();
-  exit;
 }
-
-print_r($db->query("describe issue_tracker_db")->fetchAll(PDO::FETCH_ASSOC));
