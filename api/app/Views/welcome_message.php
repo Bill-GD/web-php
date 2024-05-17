@@ -1,6 +1,6 @@
 <?php
 
-echo "aaaaa<br>";
+echo phpversion() . "<br>";
 
 $aiven_username = getenv("AivenUsername");
 $aiven_password = getenv("AivenPassword");
