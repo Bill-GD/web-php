@@ -49,7 +49,7 @@ class PlainRenderer extends TextRenderer
      *
      * @var string
      */
-    public static $theme = 'plain.css';
+    public static $theme = 'plain_css.css';
 
     /**
      * Output htmlentities instead of utf8.
