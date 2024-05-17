@@ -1,4 +1,7 @@
 <?php
+
+echo "aaaaa<br>";
+
 $aiven_username = getenv("AivenUsername");
 $aiven_password = getenv("AivenPassword");
 
