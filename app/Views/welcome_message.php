@@ -1,10 +1,6 @@
 <?php
-
-print_r(get_loaded_extensions());
-echo "<br>";
-
-$aiven_username = getenv("AivenUsername");
-$aiven_password = getenv("AivenPassword");
+$aiven_username = getenv("AIVENUSERNAME");
+$aiven_password = getenv("AIVENPASSWORD");
 
 $uri = "mysql://{$aiven_username}:{$aiven_password}@mysql-issue-tracker-dc87b75-issue-tracking-app.h.aivencloud.com:13387/issue_tracker_db?ssl-mode=REQUIRED";
 
