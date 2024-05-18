@@ -1,6 +1,6 @@
 <?php
 
-print_r( get_loaded_extensions());
+print_r(get_loaded_extensions());
 echo "<br>";
 
 $aiven_username = getenv("AivenUsername");

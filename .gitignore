@@ -382,8 +382,6 @@ Vagrantfile
 #-------------------------
 # Temporary Files
 #-------------------------
-# temp
-writable/*
 
 writable/cache/*
 !writable/cache/index.html
@@ -414,8 +412,6 @@ user_guide_src/build/*
 # Test Files
 #-------------------------
 tests/coverage*
-# temp
-tests/*
 
 # Don't save phpunit under version control.
 phpunit
@@ -424,7 +420,7 @@ phpunit
 # Composer
 #-------------------------
 vendor/
-composer.lock
+# composer.lock
 
 #-------------------------
 # IDE / Development Files
