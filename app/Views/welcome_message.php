@@ -1,6 +1,7 @@
 <?php
 
-echo phpversion() . "<br>";
+print_r( get_loaded_extensions());
+echo "<br>";
 
 $aiven_username = getenv("AivenUsername");
 $aiven_password = getenv("AivenPassword");
