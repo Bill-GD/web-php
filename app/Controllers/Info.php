@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-class Home extends BaseController {
+class Info extends BaseController {
   public function index(): string {
-    return view('welcome_message');
+    return view('php_info');
   }
 }

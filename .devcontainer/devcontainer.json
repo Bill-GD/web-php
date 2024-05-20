@@ -16,7 +16,7 @@
 	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html; if [ -f composer.json ];then composer install;fi && cp /workspaces/web-php/.devcontainers/php.ini /usr/local/php/8.3.7/ini/php.ini && cp /workspaces/web-php/.devcontainers/php.ini /usr/local/etc/php/php.ini",
+	"postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html; if [ -f composer.json ];then composer install;fi",
 
 	"customizations": {
 		"vscode": {
