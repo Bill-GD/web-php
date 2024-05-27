@@ -4,6 +4,11 @@ namespace App\Helpers;
 
 class Helpers {
   static function redirect_to(string $route): void {
+    if ($route === '/') {
+      header('Location: /');
+      exit;
+    }
+    
     if ($route[0] === '/') {
       $route = substr($route, 1);
     }
