@@ -14,8 +14,9 @@ if (isset($_REQUEST)) {
     Helpers::redirect_to("third");
   }
 }
-echo $_SERVER['REQUEST_URI'];
-echo "<br>" . current_url();
+echo "Server Addr: " . $_SERVER['PHP_SELF'] . "<br>";
+echo "URI: " . $_SERVER['REQUEST_URI'];
+echo "<br>Current URL: " . current_url();
 ?>
 
 <form method="get">

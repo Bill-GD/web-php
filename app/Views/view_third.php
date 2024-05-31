@@ -3,8 +3,9 @@
 use App\Helpers\Helpers;
 
 echo "Third view <br>";
-echo $_SERVER['REQUEST_URI'];
-echo "<br>" . current_url();
+echo "Server Addr: " . $_SERVER['PHP_SELF'] . "<br>";
+echo "URI: " . $_SERVER['REQUEST_URI'];
+echo "<br>Current URL: " . current_url();
 if (isset($_REQUEST)) {
   if (isset($_REQUEST['home_button'])) {
     Helpers::redirect_to("/");
