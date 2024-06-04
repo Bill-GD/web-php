@@ -12,4 +12,10 @@ class Helpers {
     header("Location: {$uri}{$route}");
     exit;
   }
+
+  static function set_cookies(array $cookies): void {
+    foreach ($cookies as $key => $value) {
+      setcookie($key, $value, time() + 3600, '/');
+    }
+  }
 }
