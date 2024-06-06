@@ -1,5 +1,5 @@
 <?php
-use App\Helpers\Helpers;
+use App\Helpers\Helper;
 
 if (isset($_REQUEST['info_input'])) {
   echo $_REQUEST['info_input'] . "<br>";
@@ -8,15 +8,13 @@ if (isset($_REQUEST['info_input'])) {
 echo 'Hello from php_info.php<br>';
 if (isset($_REQUEST)) {
   if (isset($_REQUEST['home_button'])) {
-    Helpers::redirect_to("/");
+    Helper::redirect_to("/");
   }
   if (isset($_REQUEST['third_button'])) {
-    Helpers::redirect_to("third");
+    Helper::redirect_to("third");
   }
 }
-echo "Server Addr: " . $_SERVER['PHP_SELF'] . "<br>";
-echo "URI: " . $_SERVER['REQUEST_URI'];
-echo "<br>Current URL: " . current_url();
+Helper::echo_server_address_info();
 ?>
 
 <form method="get">

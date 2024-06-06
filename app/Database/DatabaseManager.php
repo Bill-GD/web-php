@@ -3,20 +3,27 @@ namespace App\Database;
 
 use PDO;
 use Exception;
+use App\Config\Globals;
+use PDOStatement;
 
-class Database {
-  private static Database|null $instance = null;
+class DatabaseManager {
+  private static DatabaseManager|null $instance = null;
   private PDO $conn;
   private $host = 'mysql-issue-tracker-dc87b75-issue-tracking-app.h.aivencloud.com';
   private $database_name = 'issue_tracker_db';
   private $port = '13387';
 
   private function __construct() {
-    if (self::$instance != null)
-      throw new Exception("Instance already exists");
+    if (empty(Globals::$aiven_username)) {
+      Globals::init();
+    }
 
-    $aiven_username = getenv("AIVENUSERNAME");
-    $aiven_password = getenv("AIVENPASSWORD");
+    if (self::$instance != null) {
+      throw new Exception("Instance already exists");
+    }
+
+    $aiven_username = Globals::$aiven_username;
+    $aiven_password = Globals::$aiven_password;
 
     $uri = "mysql://{$aiven_username}:{$aiven_password}@{$this->host}:{$this->port}/{$this->database_name}?ssl-mode=REQUIRED";
     $fields = parse_url($uri);
@@ -33,7 +40,7 @@ class Database {
 
   static function instance() {
     if (!self::$instance) {
-      self::$instance = new Database();
+      self::$instance = new DatabaseManager();
     }
     return self::$instance;
   }
@@ -57,7 +64,7 @@ class Database {
     return $this->conn->query("SELECT version()")->fetch()[0];
   }
 
-  function query(string $query_string) {
+  function query(string $query_string): PDOStatement|bool {
     return $this->conn->query($query_string);
   }
 }

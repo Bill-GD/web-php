@@ -1,18 +1,15 @@
 <?php
-use App\Database\Database;
-use App\Helpers\Helpers;
-use App\Models\User;
+use App\Config\Globals;
+use App\Database\DatabaseManager;
+use App\Helpers\Helper;
 
-echo "Database version: " . Database::instance()->get_version() . "<br>";
-// try {
-//   User::register("admin@gmail.co", "saaaa", "daaaaaaaa", "daaaaaaaa");
-// } catch (Throwable $th) {
-//   echo $th->getMessage() . "<br>";
-// }
+echo "Database version: " . DatabaseManager::instance()->get_version() . "<br>";
+$client_id = Globals::$github_client_id;
+$redirect_uri = urlencode(Globals::$github_redirect_uri);
 
-echo "Server Addr: " . $_SERVER['PHP_SELF'] . "<br>";
-echo "URI: " . $_SERVER['REQUEST_URI'];
-echo "<br>Current URL: " . current_url();
+$github_auth_url = "https://github.com/login/oauth/authorize?scope=user&client_id={$client_id}&redirect_uri={$redirect_uri}";
+
+Helper::echo_server_address_info();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,14 +24,15 @@ echo "<br>Current URL: " . current_url();
     <form method="get">
       <button name="third_button">To Third View</button>
     </form>
-    <?php
 
+    <a href="<?= $github_auth_url ?>"> Get Your GitHub info </a>
+    <?php
     if (isset($_REQUEST)) {
       if (isset($_REQUEST['info_button'])) {
-        Helpers::redirect_to("info");
+        Helper::redirect_to("info");
       }
       if (isset($_REQUEST['third_button'])) {
-        Helpers::redirect_to("third");
+        Helper::redirect_to("third");
       }
     }
     ?>

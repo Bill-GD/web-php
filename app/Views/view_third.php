@@ -1,17 +1,14 @@
 <?php
 
-use App\Helpers\Helpers;
+use App\Helpers\Helper;
 
-echo "Third view <br>";
-echo "Server Addr: " . $_SERVER['PHP_SELF'] . "<br>";
-echo "URI: " . $_SERVER['REQUEST_URI'];
-echo "<br>Current URL: " . current_url();
+Helper::echo_server_address_info();
 if (isset($_REQUEST)) {
   if (isset($_REQUEST['home_button'])) {
-    Helpers::redirect_to("/");
+    Helper::redirect_to("/");
   }
   if (isset($_REQUEST['info_button'])) {
-    Helpers::redirect_to("info");
+    Helper::redirect_to("info");
   }
 }
 
