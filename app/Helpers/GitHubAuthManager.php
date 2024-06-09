@@ -1,17 +1,15 @@
 <?php
 namespace App\Helpers;
 
+use Exception;
 use CodeIgniter\Config\Services;
-use App\Config\Globals;
+use App\Helpers\Globals;
 
-/// Redirect to this url (https://github.com/login/oauth/authorize?scope=user&client_id=<client_id>&redirect_uri=<redirect_uri>)
+/// Redirect to this url (https://github.com/login/oauth/authorize?scope=user&client_id=<client_id>&redirect_uri=<redirect_uri>) to start the OAuth process
 class GitHubAuthManager {
   private $client;
 
   public function __construct() {
-    if (empty(Globals::$github_client_id)) {
-      Globals::init();
-    }
     $this->client = Services::curlrequest();
   }
 
@@ -33,7 +31,13 @@ class GitHubAuthManager {
       ]
     );
 
-    return json_decode($response->getBody(), true)['access_token'];
+    $decoded_response = json_decode($response->getBody(), true);
+
+    if (!isset($decoded_response['access_token'])) {
+      throw new Exception("GitHub code has expired or is invalid. Please try again.");
+    }
+
+    return $decoded_response['access_token'];
   }
 
   public function get_user_info(string $access_token): array {
@@ -51,7 +55,7 @@ class GitHubAuthManager {
     $user_info = json_decode($response->getBody(), true);
 
     $username = $user_info['login'];
-    $avatar_url = $user_info['avatar_url'];
+    // $avatar_url = $user_info['avatar_url'];
     $email = $user_info['email'];
 
     if ($email == null) {
@@ -77,7 +81,7 @@ class GitHubAuthManager {
 
     return [
       'username' => $username,
-      'avatar_url' => $avatar_url,
+      'avatar_url' => 'https://github.com/' . $username . '.png',
       'email' => $email,
     ];
   }

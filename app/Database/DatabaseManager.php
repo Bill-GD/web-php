@@ -3,7 +3,7 @@ namespace App\Database;
 
 use PDO;
 use Exception;
-use App\Config\Globals;
+use App\Helpers\Globals;
 use PDOStatement;
 
 class DatabaseManager {
@@ -14,10 +14,6 @@ class DatabaseManager {
   private $port = '13387';
 
   private function __construct() {
-    if (empty(Globals::$aiven_username)) {
-      Globals::init();
-    }
-
     if (self::$instance != null) {
       throw new Exception("Instance already exists");
     }

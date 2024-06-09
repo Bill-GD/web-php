@@ -1,7 +1,7 @@
 create table if not exists `user` (
   user_id int auto_increment primary key,
   email varchar(100) not null unique,
-  username varchar(50) not null,
+  username varchar(50) not null unique,
   `password` varchar(60) not null, -- this is encrypted using bcrypt
   avatar_url text not null,
   is_admin bool not null,
@@ -35,17 +35,18 @@ create table if not exists issue (
   assignee int, -- user_id, null -> empty
   `issuer` int, -- user_id, null -> empty
   date_created datetime not null,
+  date_updated datetime not null,
   foreign key (project_id) references project (project_id) on delete cascade, -- delete all issues of project
   foreign key (assignee) references `user` (user_id) on delete set null, -- set null to deleted user
   foreign key (`issuer`) references `user` (user_id) on delete set null -- set null to deleted user
 );
 
-create table if not exists issue_image (
-  image_id int primary key,
-  issue_id int not null,
-  bytes text not null, -- should be hex, continuous
-  foreign key (issue_id) references issue (issue_id) on delete cascade -- delete if issue is deleted
-);
+-- create table if not exists issue_image (
+  -- image_id int primary key,
+  -- issue_id int not null,
+  -- bytes text not null, -- should be hex, continuous
+  -- foreign key (issue_id) references issue (issue_id) on delete cascade -- delete if issue is deleted
+-- );
 
 /* sql-formatter-disable */
 delimiter $$

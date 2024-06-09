@@ -27,13 +27,13 @@ class User {
       throw new Exception('Invalid email domain');
     }
 
-    [$email, $password] = DatabaseManager::mysql_escape([$email, $password]);
-
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    [$email, $hashed_password] = DatabaseManager::mysql_escape([$email, $password]);
+
     $q_str = "SELECT * FROM `user` WHERE email = '{$email}' AND `password` = '{$hashed_password}'";
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
-    if (!$res) {
+    if (!$res || $res->rowCount() <= 0) {
       throw new Exception('Wrong email or password');
     }
 
@@ -70,6 +70,10 @@ class User {
     $res = DatabaseManager::instance()->query("SELECT * FROM `user` WHERE email = '{$email}'");
     if ($res->rowCount() > 0 || !$res) {
       throw new Exception('Email already exists');
+    }
+    $res = DatabaseManager::instance()->query("SELECT * FROM `user` WHERE username = '{$username}'");
+    if ($res->rowCount() > 0 || !$res) {
+      throw new Exception('Username already exists');
     }
     if (strlen($username) > 50) {
       throw new Exception('Username must be less than 50 characters');
