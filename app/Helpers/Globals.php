@@ -1,9 +1,7 @@
 <?php
 namespace App\Helpers;
 
-use \CodeIgniter\Config\BaseConfig;
-
-class Globals extends BaseConfig {
+class Globals {
   public static string $environment = '';
   public static string $aiven_username = '';
   public static string $aiven_password = '';

@@ -10,6 +10,9 @@ class GitHubAuthManager {
   private $client;
 
   public function __construct() {
+    if (empty(Globals::$github_client_id)) {
+      Globals::init();
+    }
     $this->client = Services::curlrequest();
   }
 

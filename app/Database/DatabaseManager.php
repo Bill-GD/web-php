@@ -14,6 +14,9 @@ class DatabaseManager {
   private $port = '13387';
 
   private function __construct() {
+    if (empty(Globals::$aiven_username)) {
+      Globals::init();
+    }
     if (self::$instance != null) {
       throw new Exception("Instance already exists");
     }
@@ -60,7 +63,7 @@ class DatabaseManager {
     return $this->conn->query("SELECT version()")->fetch()[0];
   }
 
-  function query(string $query_string): PDOStatement|bool {
+  function query(string $query_string): bool|PDOStatement {
     return $this->conn->query($query_string);
   }
 }
