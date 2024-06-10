@@ -1,21 +1,24 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\UserModel;
+use App\Helpers\Helper;
+
 class Login extends BaseController {
   public function basic_login(): string {
     return view('account/login');
   }
 
   public function login_validate() {
-    $email = $_REQUEST['email'];
-    $password = $_REQUEST['password'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    $user = new \App\Models\UserModel();
+    $user = new UserModel();
     try {
       $user->login($email, $password);
     } catch (\Exception $e) {
-      \App\Helpers\Helper::redirect_to('login?error_message=' . $e->getMessage());
+      Helper::redirect_to('login?error_message=' . $e->getMessage());
     }
-    \App\Helpers\Helper::redirect_to('/');
+    Helper::redirect_to('/');
   }
 }

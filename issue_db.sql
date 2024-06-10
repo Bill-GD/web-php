@@ -2,7 +2,7 @@ create table if not exists `user` (
   user_id int auto_increment primary key,
   email varchar(100) not null unique,
   username varchar(50) not null unique,
-  `password` varchar(60) not null, -- this is encrypted using bcrypt
+  `password` varchar(32) not null, -- this is encrypted using md5
   avatar_url text not null,
   is_admin bool not null,
   date_created datetime not null
@@ -61,13 +61,8 @@ delimiter ;
 delimiter $$
 create procedure reset_user_id ()
 begin
-	declare next_id int;
-    if (select count(1) from `user`) = 1 then
-		select max(user_id) + 1 from `user` into @next_id;
-	else
-		select 1 from `user` into @next_id;
-	end if;
-    
+  select coalesce(max(user_id), 0) + 1 from `user` into @next_id;
+  
   set @alter_statement = concat('alter table `user` auto_increment = ', @next_id);
   PREPARE stmt FROM @alter_statement;
   EXECUTE stmt;
@@ -87,17 +82,12 @@ delimiter ;
 delimiter $$
 create procedure reset_project_id ()
 begin
-	declare next_id int;
-    if (select count(1) from project) = 1 then
-		select max(project_id) + 1 from project into @next_id;
-	else
-		select 1 from project into @next_id;
-	end if;
-    
-    set @alter_statement = concat('alter table project auto_increment = ', @next_id);
-    PREPARE stmt FROM @alter_statement;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
+  select coalesce(max(project_id), 0) + 1 from `project` into @next_id;
+  
+  set @alter_statement = concat('alter table project auto_increment = ', @next_id);
+  PREPARE stmt FROM @alter_statement;
+  EXECUTE stmt;
+  DEALLOCATE PREPARE stmt;
 end $$
 delimiter ;
 /* sql-formatter-enable */

@@ -1,30 +1,34 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\UserModel;
+use App\Helpers\Helper;
+
 class SignUp extends BaseController {
   public function basic_signup(): string {
     return view('account/signup');
   }
 
   public function signup_validate() {
-    $email = $_REQUEST['email'];
-    $username = $_REQUEST['username'];
-    $password = $_REQUEST['password'];
-    $confirm_password = $_REQUEST['confirm-password'];
+    $email = $_POST['email'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm-password'];
+    $avatar_url = $_POST['avatar-url'];
 
-    $user = new \App\Models\UserModel();
+    $user = new UserModel();
     try {
-      $user->register($email, $username, $password, $confirm_password);
+      $user->register($email, $username, $password, $confirm_password, $avatar_url);
     } catch (\Exception $e) {
-      \App\Helpers\Helper::redirect_to('signup?error_message=' . $e->getMessage());
+      Helper::redirect_to('signup?error_message=' . urlencode($e->getMessage()));
     }
-    \App\Helpers\Helper::redirect_to('/');
+    Helper::redirect_to('/');
   }
 
-  public function github_signup(string $username, string $email): string {
-    return view('account/signup', [
-      'username' => urldecode($username),
-      'email' => urldecode($email),
-    ]);
+  public function github_signup(): string {
+    if (!isset($_SESSION['github_username'], $_SESSION['github_email'], $_SESSION['github_avatar_url'])) {
+      redirect('signup')->with('error_message', urlencode('GitHub login failed'));
+    }
+    return view('account/signup');
   }
 }

@@ -14,6 +14,15 @@ class Helper {
     exit;
   }
 
+  static function get_resource_path(string $relative_path): string {
+    if (empty(Globals::$environment)) {
+      Globals::init();
+    }
+    $relative_path[0] !== '/' ? $relative_path = "/{$relative_path}" : 0;
+    $is_prod = Globals::$environment === 'production';
+    return ($is_prod ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $relative_path;
+  }
+
   static function set_cookies(array $cookies): void {
     foreach ($cookies as $key => $value) {
       setcookie($key, $value, time() + 3600, '/');
@@ -21,9 +30,11 @@ class Helper {
   }
 
   static function set_session_vars(array $session_values): void {
-    foreach ($session_values as $key => $value) {
-      $_SESSION[$key] = $value;
-    }
+    \Config\Services::session()->set($session_values);
+  }
+
+  static function remove_session_vars(array $session_keys): void {
+    \Config\Services::session()->remove($session_keys);
   }
 
   static function echo_server_address_info(): void {

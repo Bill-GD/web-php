@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>BugTrackr</title>
     <?= App\Helpers\PageComponent::import_styles() ?>
+    <style>
+      body {
+        padding-top: 95px;
+      }
+    </style>
   </head>
   <body class="bg-dark">
     <?= App\Helpers\PageComponent::page_header() ?>

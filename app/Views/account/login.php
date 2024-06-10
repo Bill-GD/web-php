@@ -12,9 +12,10 @@
     </style>
   </head>
   <body class="bg-dark">
+    <?= App\Helpers\PageComponent::home_button() ?>
     <div class="auth-form fg-white">
       <h3 class="text-center mb-3">Sign in to BugTrackr</h3>
-      <?php if (isset($_REQUEST['error_message'])) {
+      <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
       } ?>
       <div class="bg-dark-subtle border border-dark-subtle rounded-2 p-3">

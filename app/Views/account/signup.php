@@ -1,3 +1,14 @@
+<?php
+$e_attr = '';
+$u_attr = '';
+$pfp_url = 'assets/default_avatar.png';
+if (isset($_SESSION['github_username'], $_SESSION['github_email'], $_SESSION['github_avatar_url'])) {
+  $e_attr = 'value="' . $_SESSION['github_email'] . '" readonly';
+  $u_attr = 'value="' . $_SESSION['github_username'] . '" readonly';
+  $pfp_url = $_SESSION['github_avatar_url'];
+  \App\Helpers\Helper::remove_session_vars(['github_username', 'github_email', 'github_avatar_url']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,29 +23,35 @@
     </style>
   </head>
   <body class="bg-dark">
+    <?= App\Helpers\PageComponent::home_button() ?>
     <div class="auth-form fg-white">
       <h3 class="text-center py-2">Sign up to BugTrackr</h3>
-      <?php if (isset($_REQUEST['error_message'])) {
-        echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
+      <?php if (isset($_GET['error_message'])) {
+        echo App\Helpers\PageComponent::alert_danger($_GET['error_message']);
       } ?>
       <div class="bg-dark-subtle border border-dark-subtle rounded-2 p-3">
-        <form action="signup-validate" method="post">
+        <form action="/public/signup-validate" method="post">
           <div class="form-group">
             <label class="form-label" for="email">Email address</label>
-            <input type="email" class="form-control form-input" id="email" name="email" required>
+            <input type="email" class="form-control form-input" id="email" name="email" required <?= $e_attr ?>>
           </div>
           <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input type="text" class="form-control form-input" id="username" name="username" required>
+            <input type="text" class="form-control form-input" id="username" name="username" required <?= $u_attr ?>>
           </div>
-          <div class="form-group my-2">
+          <div class="form-group">
             <label class="form-label" for="password">Password</label>
             <input type="password" class="form-control form-input" id="password" name="password" required>
           </div>
-          <div class="form-group my-2">
+          <div class="form-group">
             <label class="form-label" for="confirm-password">Confirm Password</label>
             <input type="password" class="form-control form-input" id="confirm-password" name="confirm-password"
               required>
+          </div>
+          <div class="form-group visually-hidden">
+            <label class="form-label" for="avatar-url">Avatar URL</label>
+            <input type="text" class="form-control form-input" id="avatar-url" name="avatar-url" value="<?= $pfp_url ?>"
+              required readonly>
           </div>
           <button type="submit" class="btn btn-success w-100 mt-3">Sign up</button>
         </form>
@@ -48,7 +65,7 @@
         </a>
       </div>
       <div class="bg-dark-subtle border border-dark-subtle rounded-2 p-3 mt-2 text-center">
-        Already have an account? <a class="link-underline-opacity-0" href="login">Sign in</a>
+        Already have an account? <a class="link-underline-opacity-0" href="/public/login">Sign in</a>
       </div>
     </div>
   </body>

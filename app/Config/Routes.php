@@ -12,5 +12,5 @@ $routes->get('login', 'Login::basic_login');
 $routes->post('login-validate', 'Login::login_validate');
 $routes->get('signup', 'SignUp::basic_signup');
 $routes->post('signup-validate', 'SignUp::signup_validate');
-$routes->get('signup/(:segment)/(:segment)', 'SignUp::github_signup/$1/$2');
+$routes->get('signup/github', 'SignUp::github_signup');
 $routes->get('logout', 'Logout::index');
