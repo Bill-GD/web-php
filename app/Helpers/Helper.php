@@ -20,6 +20,12 @@ class Helper {
     }
   }
 
+  static function set_session_vars(array $session_values): void {
+    foreach ($session_values as $key => $value) {
+      $_SESSION[$key] = $value;
+    }
+  }
+
   static function echo_server_address_info(): void {
     $lines = [
       "Executing script: " . $_SERVER['PHP_SELF'],
@@ -33,6 +39,9 @@ class Helper {
   }
 
   static function get_github_auth_url(): string {
+    if (empty(Globals::$github_client_id)) {
+      Globals::init();
+    }
     $client_id = Globals::$github_client_id;
     $redirect_uri = urlencode(Globals::$github_redirect_uri);
     return "https://github.com/login/oauth/authorize?scope=user&client_id={$client_id}&redirect_uri={$redirect_uri}";

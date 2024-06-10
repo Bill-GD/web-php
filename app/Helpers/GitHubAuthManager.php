@@ -1,7 +1,6 @@
 <?php
 namespace App\Helpers;
 
-use Exception;
 use CodeIgniter\Config\Services;
 use App\Helpers\Globals;
 
@@ -37,7 +36,7 @@ class GitHubAuthManager {
     $decoded_response = json_decode($response->getBody(), true);
 
     if (!isset($decoded_response['access_token'])) {
-      throw new Exception("GitHub code has expired or is invalid. Please try again.");
+      throw new \Exception("GitHub code has expired or is invalid. Please try again.");
     }
 
     return $decoded_response['access_token'];

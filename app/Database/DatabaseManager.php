@@ -2,7 +2,6 @@
 namespace App\Database;
 
 use PDO;
-use Exception;
 use App\Helpers\Globals;
 use PDOStatement;
 
@@ -18,7 +17,7 @@ class DatabaseManager {
       Globals::init();
     }
     if (self::$instance != null) {
-      throw new Exception("Instance already exists");
+      throw new \Exception("Instance already exists");
     }
 
     $aiven_username = Globals::$aiven_username;

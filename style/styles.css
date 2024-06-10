@@ -1,3 +1,61 @@
+:root {
+  --fg-dark-subtle: #2f3339;
+  --bg-dark: #0D1117;
+  --bg-dark-subtle: #161B22;
+}
 body {
   padding-top: 95px;
 }
+
+/* alert */
+.alert {
+  background-color: #2C0B0E !important;
+  border-color: #842029 !important;
+  color: #EA868F !important;
+}
+
+/* foreground */
+.fg-white {
+  color: white;
+}
+.fg-grey {
+  color: #666;
+}
+
+/* border */
+.border-dark-subtle {
+  border-color: var(--fg-dark-subtle) !important;
+}
+
+/* background */
+.bg-dark {
+  background-color: var(--bg-dark) !important;
+}
+.bg-dark-subtle {
+  background-color: var(--bg-dark-subtle) !important;
+}
+
+/* button */
+.btn-success {
+  background-color: #009422 !important;
+}
+.btn-success:hover {
+  background-color: #00bb2c !important;
+}
+
+/* form */
+.form-label {
+  color: white;
+  font-size: small;
+}
+.auth-form {
+  max-width: 330px;
+  margin: 0 auto;
+}
+.form-input,
+.form-input:focus {
+  border-color: var(--fg-dark-subtle);
+  background-color: var(--bg-dark);
+  color: white;
+}
+

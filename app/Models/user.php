@@ -4,7 +4,6 @@ namespace App\Models;
 use App\Database\DatabaseManager;
 use App\Helpers\Helper;
 use PDO;
-use Exception;
 
 class User {
   public string $user_id;
@@ -14,17 +13,17 @@ class User {
 
   function login(string $email, string $password): void {
     if (empty($email)) {
-      throw new Exception('Email is required');
+      throw new \Exception('Email is required');
     }
     if (empty($password)) {
-      throw new Exception('Password is required');
+      throw new \Exception('Password is required');
     }
     if (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/", $email)) {
-      throw new Exception('Invalid email format');
+      throw new \Exception('Invalid email format');
     }
     $email_domain = explode('@', $email)[1];
     if (!checkdnsrr($email_domain)) {
-      throw new Exception('Invalid email domain');
+      throw new \Exception('Invalid email domain');
     }
 
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
@@ -34,10 +33,11 @@ class User {
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
     if (!$res || $res->rowCount() <= 0) {
-      throw new Exception('Wrong email or password');
+      throw new \Exception('Wrong email or password');
     }
 
     Helper::set_cookies([
+      'is_logged_in' => true,
       'user_id' => $res['user_id'],
       'email' => $res['email'],
       'username' => $res['username'],
@@ -48,44 +48,44 @@ class User {
   static function register(string $email, string $username, string $password, string $confirm_password, bool $is_admin = false): void {
     // empty input
     if (empty($email)) {
-      throw new Exception('Email is required');
+      throw new \Exception('Email is required');
     }
     if (empty($username)) {
-      throw new Exception('Username is required');
+      throw new \Exception('Username is required');
     }
     if (empty($password)) {
-      throw new Exception('Password is required');
+      throw new \Exception('Password is required');
     }
     if (empty($confirm_password)) {
-      throw new Exception('Please confirm the password');
+      throw new \Exception('Please confirm the password');
     }
     if ($password !== $confirm_password) {
-      throw new Exception('Passwords do not match');
+      throw new \Exception('Passwords do not match');
     }
 
     // check value
     if (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/", $email)) {
-      throw new Exception('Invalid email format');
+      throw new \Exception('Invalid email format');
     }
     $res = DatabaseManager::instance()->query("SELECT * FROM `user` WHERE email = '{$email}'");
     if ($res->rowCount() > 0 || !$res) {
-      throw new Exception('Email already exists');
+      throw new \Exception('Email already exists');
     }
     $res = DatabaseManager::instance()->query("SELECT * FROM `user` WHERE username = '{$username}'");
     if ($res->rowCount() > 0 || !$res) {
-      throw new Exception('Username already exists');
+      throw new \Exception('Username already exists');
     }
     if (strlen($username) > 50) {
-      throw new Exception('Username must be less than 50 characters');
+      throw new \Exception('Username must be less than 50 characters');
     }
     if (strlen($password) < 8) {
-      throw new Exception('Password should be at least 8 characters');
+      throw new \Exception('Password should be at least 8 characters');
     }
 
     // sanitize input
-    [$email, $username, $password] = DatabaseManager::mysql_escape([$email, $username, $password]);
-
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    [$email, $username, $hashed_password] = DatabaseManager::mysql_escape([$email, $username, $hashed_password]);
+
     $q_str = "INSERT INTO `user` (email, username, `password`, is_admin, date_created) VALUES ('{$email}', '{$username}', '{$hashed_password}', " . ($is_admin ? 1 : 0) . ", now())";
     DatabaseManager::instance()->query($q_str);
   }
@@ -95,7 +95,7 @@ class User {
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
     if (!$res) {
-      throw new Exception('User not found');
+      throw new \Exception('User not found');
     }
 
     $new_user = new User();
@@ -111,7 +111,7 @@ class User {
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
     if (!$res) {
-      throw new Exception('User not found');
+      throw new \Exception('User not found');
     }
 
     $new_user = new User();
