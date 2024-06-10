@@ -5,7 +5,7 @@ use App\Database\DatabaseManager;
 use App\Helpers\Helper;
 use PDO;
 
-class User {
+class UserModel {
   public string $user_id;
   public string $email;
   public string $username;
@@ -90,7 +90,7 @@ class User {
     DatabaseManager::instance()->query($q_str);
   }
 
-  static function find_user_by_email(string $email): User {
+  static function find_user_by_email(string $email): UserModel {
     $q_str = "SELECT * FROM `user` WHERE email = '{$email}'";
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
@@ -98,7 +98,7 @@ class User {
       throw new \Exception('User not found');
     }
 
-    $new_user = new User();
+    $new_user = new UserModel();
     $new_user->user_id = $res['user_id'];
     $new_user->email = $res['email'];
     $new_user->username = $res['username'];
@@ -106,7 +106,7 @@ class User {
     return $new_user;
   }
 
-  static function find_user_by_username(string $username): User {
+  static function find_user_by_username(string $username): UserModel {
     $q_str = "SELECT * FROM `user` WHERE username = '{$username}'";
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
@@ -114,7 +114,7 @@ class User {
       throw new \Exception('User not found');
     }
 
-    $new_user = new User();
+    $new_user = new UserModel();
     $new_user->user_id = $res['user_id'];
     $new_user->email = $res['email'];
     $new_user->username = $res['username'];

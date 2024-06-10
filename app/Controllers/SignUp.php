@@ -12,7 +12,7 @@ class SignUp extends BaseController {
     $password = $_REQUEST['password'];
     $confirm_password = $_REQUEST['confirm-password'];
 
-    $user = new \App\Models\User();
+    $user = new \App\Models\UserModel();
     try {
       $user->register($email, $username, $password, $confirm_password);
     } catch (\Exception $e) {

@@ -10,7 +10,7 @@ class Login extends BaseController {
     $email = $_REQUEST['email'];
     $password = $_REQUEST['password'];
 
-    $user = new \App\Models\User();
+    $user = new \App\Models\UserModel();
     try {
       $user->login($email, $password);
     } catch (\Exception $e) {
