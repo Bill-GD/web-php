@@ -13,7 +13,7 @@
   </head>
   <body class="bg-dark">
     <?= App\Helpers\PageComponent::home_button() ?>
-    <div class="auth-form fg-white">
+    <div class="auth-form text-white">
       <h3 class="text-center mb-3">Sign in to BugTrackr</h3>
       <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);

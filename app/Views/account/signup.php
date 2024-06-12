@@ -1,7 +1,7 @@
 <?php
 $e_attr = '';
 $u_attr = '';
-$pfp_url = 'assets/default_avatar.png';
+$pfp_url = 'public/assets/default_avatar.png';
 if (isset($_SESSION['github_username'], $_SESSION['github_email'], $_SESSION['github_avatar_url'])) {
   $e_attr = 'value="' . $_SESSION['github_email'] . '" readonly';
   $u_attr = 'value="' . $_SESSION['github_username'] . '" readonly';
@@ -24,7 +24,7 @@ if (isset($_SESSION['github_username'], $_SESSION['github_email'], $_SESSION['gi
   </head>
   <body class="bg-dark">
     <?= App\Helpers\PageComponent::home_button() ?>
-    <div class="auth-form fg-white">
+    <div class="auth-form text-white">
       <h3 class="text-center py-2">Sign up to BugTrackr</h3>
       <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_GET['error_message']);
@@ -55,7 +55,7 @@ if (isset($_SESSION['github_username'], $_SESSION['github_email'], $_SESSION['gi
           </div>
           <button type="submit" class="btn btn-success w-100 mt-3">Sign up</button>
         </form>
-        <a class="btn btn-dark fg-white mt-3 w-100" href="<?= App\Helpers\Helper::get_github_auth_url() ?>">
+        <a class="btn btn-dark text-white mt-3 w-100" href="<?= App\Helpers\Helper::get_github_auth_url() ?>">
           Sign up with GitHub
           <svg class="ps-2" height="32" width="32" viewBox="0 0 16 16">
             <path fill="#fff"
