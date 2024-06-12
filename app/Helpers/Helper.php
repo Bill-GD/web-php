@@ -25,7 +25,7 @@ class Helper {
 
   static function set_cookies(array $cookies): void {
     foreach ($cookies as $key => $value) {
-      setcookie($key, $value, time() + 3600, '/');
+      setcookie($key, $value, time() + 604800, '/'); // save cookies for 1 week
     }
   }
 

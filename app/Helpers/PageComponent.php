@@ -12,7 +12,7 @@ class PageComponent {
 
   static function page_header(): string {
     return
-      '<header class="navbar bg-black fixed-top border-secondary border-bottom py-3">
+      '<header class="navbar bg-dark fixed-top border-dark-subtle border-bottom py-2">
         <div class="container">
           <a class="navbar-brand text-white" href="/">BugTrackr</a>'
       . self::nav_content()
@@ -46,7 +46,7 @@ class PageComponent {
   static private function nav_links(): string {
     $links = [
       'Projects' => '#',
-      'Issues' => '#',
+      'Issues' => 'error-list',
     ];
 
     $nav_links = '';
@@ -68,7 +68,7 @@ class PageComponent {
     return
       '<div class="nav-item dropdown text-white">
         <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-          <img class="rounded-5" src="' . $user_pfp . '" width=40, height=40>
+          <img class="rounded-5" src="' . $user_pfp . '" width=30, height=30>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark">
           <li class="px-3 py-2">' . $_COOKIE['username'] . '</li>

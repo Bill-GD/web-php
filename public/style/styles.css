@@ -1,6 +1,6 @@
 :root {
   --fg-dark-subtle: #2f3339;
-  --bg-dark: #0d1117;
+  --bg-dark: #010409;
   --bg-dark-subtle: #161b22;
 }
 
@@ -33,6 +33,9 @@
 }
 
 /* button */
+.btn {
+  padding: 0.5rem 0.75rem !important;
+}
 .btn-success {
   background-color: #009422 !important;
 }
@@ -61,4 +64,57 @@
 }
 .form-input:disabled {
   color: #808080;
+}
+
+#error_list {
+  padding: 100px 15px 15px 15px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#error_list h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#error_list form {
+  display: flex;
+  flex-direction: column;
+}
+
+#error_list form label {
+  font-weight: bold;
+
+}
+
+#error_list form input[type="text"],
+#error_list form textarea,
+#error_list form select {
+  width: 100%;
+  padding: 10px;
+  
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#error_list form input[type="file"] {
+  margin-top: 0px;
+}
+
+#error_list form input[type="submit"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  background-color: #007BFF;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#error_list form input[type="submit"]:hover {
+  background-color: #0056b3;
 }

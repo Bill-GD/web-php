@@ -14,3 +14,4 @@ $routes->get('signup', 'SignUp::basic_signup');
 $routes->post('signup-validate', 'SignUp::signup_validate');
 $routes->get('signup/github', 'SignUp::github_signup');
 $routes->get('logout', 'Logout::index');
+$routes->get('error-list', 'ErrorList::index');
