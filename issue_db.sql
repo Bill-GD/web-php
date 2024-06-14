@@ -12,6 +12,7 @@ create table if not exists `user` (
 create table if not exists project (
   project_id int auto_increment primary key,
   project_name varchar(50) not null,
+  `description` text not null,
   date_created datetime not null,
   `owner` int not null,
   foreign key (`owner`) references `user` (user_id) on delete cascade -- delete account -> delete all owned projects
@@ -31,7 +32,7 @@ create table if not exists issue (
   project_id int not null,
   title varchar(100) not null,
   `description` text not null,
-  `status` varchar(10) not null, -- error, cancelled, pending, tsted, closed
+  `status` varchar(10) not null, -- error, cancelled, pending, tested, closed
   priority varchar(5) not null, -- high, mid, low
   assignee int, -- user_id, null -> empty
   `issuer` int, -- user_id, null -> empty
