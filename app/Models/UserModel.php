@@ -94,8 +94,10 @@ class UserModel {
 
     $hashed_password = md5($password);
     [$email, $username] = DatabaseManager::mysql_escape([$email, $username]);
-
-    $q_str = "INSERT INTO `user` (email, username, `password`, avatar_url, is_admin, date_created) VALUES ('{$email}', '{$username}', '{$hashed_password}', '{$avatar_url}', " . ($is_admin ? 1 : 0) . ", now())";
+    
+    $current_time = (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s');
+    $q_str = "INSERT INTO `user` (email, username, `password`, avatar_url, is_admin, date_created) VALUES
+    ('{$email}', '{$username}', '{$hashed_password}', '{$avatar_url}', " . ($is_admin ? 1 : 0) . ", '{$current_time}')";
     DatabaseManager::instance()->query($q_str);
   }
 

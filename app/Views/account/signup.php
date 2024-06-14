@@ -2,11 +2,10 @@
 $e_attr = '';
 $u_attr = '';
 $pfp_url = 'public/assets/default_avatar.png';
-if (isset($_SESSION['github_username'], $_SESSION['github_email'], $_SESSION['github_avatar_url'])) {
-  $e_attr = 'value="' . $_SESSION['github_email'] . '" readonly';
-  $u_attr = 'value="' . $_SESSION['github_username'] . '" readonly';
-  $pfp_url = $_SESSION['github_avatar_url'];
-  \App\Helpers\Helper::remove_session_vars(['github_username', 'github_email', 'github_avatar_url']);
+if (isset($_COOKIE['github_username'], $_COOKIE['github_email'], $_COOKIE['github_avatar_url'])) {
+  $e_attr = 'value="' . $_COOKIE['github_email'] . '" readonly';
+  $u_attr = 'value="' . $_COOKIE['github_username'] . '" readonly';
+  $pfp_url = $_COOKIE['github_avatar_url'];
 }
 ?>
 <!DOCTYPE html>

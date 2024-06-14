@@ -23,9 +23,11 @@ class Helper {
     return ($is_prod ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $relative_path;
   }
 
-  static function set_cookies(array $cookies): void {
+  /** @param int $time Default is to save cookies for 1 week
+   */
+  static function set_cookies(array $cookies, int $time = 604800): void {
     foreach ($cookies as $key => $value) {
-      setcookie($key, $value, time() + 604800, '/'); // save cookies for 1 week
+      setcookie($key, $value, time() + $time, '/');
     }
   }
 

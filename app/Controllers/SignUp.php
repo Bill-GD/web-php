@@ -22,7 +22,8 @@ class SignUp extends BaseController {
     } catch (\Exception $e) {
       Helper::redirect_to('signup?error_message=' . urlencode($e->getMessage()));
     }
-    Helper::redirect_to('/');
+    Helper::set_cookies(['github_username' => '', 'github_email' => '', 'github_avatar_url' => ''], -1);
+    Helper::redirect_to('login');
   }
 
   public function github_signup(): string {
