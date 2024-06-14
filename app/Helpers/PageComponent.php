@@ -45,7 +45,7 @@ class PageComponent {
   }
 
   static private function nav_content(): string {
-    $is_logged_in = isset($_COOKIE['is_logged_in']) && $_COOKIE['is_logged_in'] === '1';
+    $is_logged_in = Helper::is_logged_in();
     return $is_logged_in
       ? self::nav_links() . self::account_drop_down()
       : self::sign_up_in_buttons();
@@ -53,7 +53,7 @@ class PageComponent {
 
   static private function nav_links(): string {
     $access_uri = $_SERVER['REQUEST_URI'];
-    
+
     $links = [
       // title => [href, enabled, is_active]
       'Projects' => ['#', false, str_contains($access_uri, 'projects')],
@@ -96,7 +96,7 @@ class PageComponent {
     return
       '<ul class="nav col-2">
         <li class="nav-item m-auto">
-          <a href="login" role="button" class="btn btn-outline-light">Log in</a>
+          <a href="login" role="button" class="btn btn-outline-light">Sign in</a>
         </li>
         <li class="nav-item">
           <a href="signup" role="button" type="button" class="btn btn-light">Sign up</a>
@@ -104,7 +104,10 @@ class PageComponent {
       </ul>';
   }
 
-  private static function throw_not_implemented(string $method_name): void {
-    throw new \Exception("Component {$method_name} is not implemented");
+  static function code_background(bool $logged_in): string {
+    return
+      $logged_in
+      ? ''
+      : '<img class="bg-image fixed-top z-n1 w-100 h-auto" src="' . Helper::get_resource_path('public/assets/generic_code_bg.png') . '" alt="Code background image">';
   }
 }

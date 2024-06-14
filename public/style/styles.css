@@ -25,6 +25,9 @@
 .fg-grey {
   color: #666;
 }
+.bg-image {
+  opacity: 0.3;
+}
 
 /* text */
 .navbar-brand {

@@ -62,7 +62,16 @@ class DatabaseManager {
     return $this->conn->query("SELECT version()")->fetch()[0];
   }
 
-  function query(string $query_string): bool|PDOStatement {
-    return $this->conn->query($query_string);
+  /**
+   * Wraps the PDO query calls in a single function.
+   * @param string $query_string The query string to execute, can use `:param_name` for named parameters, or plain query string.
+   * @param array $params The parameters to bind to the query string.
+   */
+  // * needs improvement: check for named param, if no, force param binds to be empty
+  function query(string $query_string, array $params = []): PDOStatement {
+    $stmt = $this->conn->prepare($query_string);
+    $stmt->execute($params);
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    return $stmt;
   }
 }

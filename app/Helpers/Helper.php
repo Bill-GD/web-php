@@ -23,6 +23,13 @@ class Helper {
     return ($is_prod ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $relative_path;
   }
 
+  static function is_logged_in(): bool {
+    return isset($_COOKIE['is_logged_in']) && $_COOKIE['is_logged_in'] === '1';
+  }
+  static function is_admin(): bool {
+    return isset($_COOKIE['is_admin']) && $_COOKIE['is_admin'] === '1';
+  }
+
   /** @param int $time Default is to save cookies for 1 week
    */
   static function set_cookies(array $cookies, int $time = 604800): void {

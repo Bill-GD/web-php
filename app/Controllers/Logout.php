@@ -11,7 +11,7 @@ class Logout extends BaseController {
       'email' => '',
       'username' => '',
       'is_admin' => false,
-    ]);
+    ], -1);
     Helper::redirect_to('/');
     return view('home');
   }
