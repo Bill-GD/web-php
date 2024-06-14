@@ -14,7 +14,7 @@ class SignUp extends BaseController {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm-password'];
-    $avatar_url = $_POST['avatar-url'];
+    $avatar_url = isset($_COOKIE['github_avatar_url']) ? $_COOKIE['github_avatar_url'] : 'public/assets/default_avatar.png';
 
     $user = new UserModel();
     try {

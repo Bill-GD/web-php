@@ -1,11 +1,9 @@
 <?php
 $e_attr = '';
 $u_attr = '';
-$pfp_url = 'public/assets/default_avatar.png';
-if (isset($_COOKIE['github_username'], $_COOKIE['github_email'], $_COOKIE['github_avatar_url'])) {
+if (isset($_COOKIE['github_username'], $_COOKIE['github_email'])) {
   $e_attr = 'value="' . $_COOKIE['github_email'] . '" readonly';
   $u_attr = 'value="' . $_COOKIE['github_username'] . '" readonly';
-  $pfp_url = $_COOKIE['github_avatar_url'];
 }
 ?>
 <!DOCTYPE html>
@@ -46,11 +44,6 @@ if (isset($_COOKIE['github_username'], $_COOKIE['github_email'], $_COOKIE['githu
             <label class="form-label" for="confirm-password">Confirm Password</label>
             <input type="password" class="form-control form-input" id="confirm-password" name="confirm-password"
               required>
-          </div>
-          <div class="form-group visually-hidden">
-            <label class="form-label" for="avatar-url">Avatar URL</label>
-            <input type="text" class="form-control form-input" id="avatar-url" name="avatar-url" value="<?= $pfp_url ?>"
-              required readonly>
           </div>
           <button type="submit" class="btn btn-success w-100 mt-3">Sign up</button>
         </form>

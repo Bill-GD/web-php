@@ -5,7 +5,8 @@ create table if not exists `user` (
   `password` varchar(32) not null, -- this is encrypted using md5
   avatar_url text not null,
   is_admin bool not null,
-  date_created datetime not null
+  date_created datetime not null,
+  github_access_token text -- saved as hex
 );
 
 create table if not exists project (
