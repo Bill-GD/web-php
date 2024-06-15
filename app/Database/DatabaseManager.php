@@ -69,9 +69,27 @@ class DatabaseManager {
    */
   // * needs improvement: check for named param, if no, force param binds to be empty
   function query(string $query_string, array $params = []): PDOStatement {
+    if (!$this->starts_with($query_string, ['SELECT', 'INSERT', 'UPDATE', 'DELETE'])) {
+      throw new \Exception("Invalid query string, must start with SELECT, INSERT, UPDATE or DELETE");
+    }
+    // filter all token starts with `:`
+    $named_params = array_filter(explode(' ', $query_string), fn($token) => str_starts_with($token, ':'));
+    if (count($named_params) != count($params)) {
+      throw new \Exception("Number of named parameters does not match number of provided parameters");
+    }
+
     $stmt = $this->conn->prepare($query_string);
     $stmt->execute($params);
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     return $stmt;
+  }
+
+  private function starts_with(string $str, array $search_strings): bool {
+    foreach ($search_strings as $search_string) {
+      if (str_starts_with($str, $search_string)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
