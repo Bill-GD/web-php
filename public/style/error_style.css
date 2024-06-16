@@ -19,6 +19,10 @@ body {
 .float-right {
   float: right !important;
 }
+
+.float-left {
+  float: left !important;
+}
 .Button {
   align-items: center;
   background-color: initial;
@@ -75,10 +79,91 @@ body {
   box-shadow: 0 0 0 1px #1f6feb;
 }
 
+.form-control::placeholder,
+.form-select::placeholder{
+    color: #8b949e;
+}
+
+.form-control,
+.form-selec::se{
+    color: #8b949e;
+}
+
 .input-contrast {
   background-color: #161b22;
 }
 
 .input-contrast:focus {
   background-color: #0d1117;
+}
+
+
+/* CREATE ISSUES */
+
+.mt-4{
+  margin-top: 24px;
+}
+
+.container-xl{
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.Layout{
+    display: grid;
+    grid-auto-flow: column;
+}
+
+.Layout-main{
+    grid-column: 1 ;
+    width: 936px;
+    min-width: 0;
+}
+
+.Layout-side-bar{
+    grid-column: 2 / span 2;
+    width: 256px;
+ 
+}
+
+
+.Box{
+    background-color: #0d1117;
+    border-color: #30363d;
+    border-radius: 0.375rem;
+    border-style: solid;
+    border-width: max(1px, 0.0625rem);
+}
+
+.tab-container{
+    border-bottom: 1px solid #30363d;
+    display: block;
+    overflow: auto;
+}
+.comment-box-header{
+    display: flex;
+    height: 38px;
+    background-color: #161b22;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.tablink{
+    color: #e6edf3;
+    border: 0;
+    display: inline-block;
+    flex-shrink: 0;
+    line-height: 23px;
+    width: 67px;
+}
+
+.issue_description{
+    border: 1px solid #30363d;
+    border-top: none;
+    display: block;
+    overflow: hidden;
+    height: 250px;
+    border-radius: 6px;
+    background-color: #0d1117;
 }
