@@ -19,10 +19,10 @@ create table if not exists project (
 );
 
 create table if not exists project_role (
-  id int primary key,
   project_id int not null,
   user_id int not null,
   user_role varchar(20) not null,
+  primary key (project_id, user_id),
   foreign key (project_id) references project (project_id) on delete cascade, -- delete project -> delete all related roles
   foreign key (user_id) references `user` (user_id) on delete cascade -- delete related user -> delete role
 );
@@ -43,12 +43,12 @@ create table if not exists issue (
   foreign key (`issuer`) references `user` (user_id) on delete set null -- set null to deleted user
 );
 
--- create table if not exists issue_image (
-  -- image_id int primary key,
-  -- issue_id int not null,
-  -- bytes text not null, -- should be hex, continuous
-  -- foreign key (issue_id) references issue (issue_id) on delete cascade -- delete if issue is deleted
--- );
+create table if not exists issue_image (
+  image_id int primary key,
+  issue_id int not null,
+  bytes text not null, -- should be hex, continuous
+  foreign key (issue_id) references issue (issue_id) on delete cascade -- delete if issue is deleted
+);
 
 /* sql-formatter-disable */
 delimiter $$
