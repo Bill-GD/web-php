@@ -1,8 +1,12 @@
 :root {
   --fg-dark-light: #6c6c6c;
   --fg-dark-subtle: #2f3339;
+  --fg-green-light: #00bb2c;
+  --fg-red-light: #ff2f40;
+  --fg-purple-light: #a57af0;
   --bg-dark: #010409;
-  --bg-dark-subtle: #161b22;
+  --bg-dark-subtle: #0d1117;
+  --bg-dark-light: #161b22;
 }
 
 /* alert */
@@ -20,13 +24,13 @@
 .nav-link.active {
   font-weight: bold;
 }
+a {
+  text-decoration: none;
+}
 
 /* foreground */
 .fg-grey {
   color: #666;
-}
-.bg-image {
-  opacity: 0.3;
 }
 
 /* text */
@@ -38,6 +42,9 @@
 .border-dark-subtle {
   border-color: var(--fg-dark-subtle) !important;
 }
+.border-dark-light {
+  border-color: var(--fg-dark-light) !important;
+}
 
 /* background */
 .bg-dark {
@@ -45,6 +52,12 @@
 }
 .bg-dark-subtle {
   background-color: var(--bg-dark-subtle) !important;
+}
+.bg-dark-light {
+  background-color: var(--bg-dark-light) !important;
+}
+.bg-image {
+  opacity: 0.3;
 }
 
 /* button */
@@ -55,7 +68,7 @@
   background-color: #009422 !important;
 }
 .btn-success:hover {
-  background-color: #00bb2c !important;
+  background-color: var(--fg-green-light) !important;
 }
 .home-button {
   position: sticky;
@@ -77,6 +90,9 @@
   background-color: var(--bg-dark);
   color: white;
 }
+.form-input::placeholder {
+  color: var(--fg-dark-light);
+}
 .form-input:disabled {
   color: #808080;
 }
@@ -84,19 +100,34 @@
 /* svg */
 .svg-white {
   fill: #fff;
+  color: #fff;
+}
+.svg-dark-light {
+  fill: var(--fg-dark-light);
+  color: var(--fg-dark-light);
+}
+.svg-green {
+  fill: var(--fg-green-light);
+  color: var(--fg-green-light);
+}
+.svg-red {
+  fill: var(--fg-red-light);
+  color: var(--fg-red-light);
+}
+.svg-purple {
+  fill: var(--fg-purple-light);
+  color: var(--fg-purple-light);
 }
 
+/* margin */
+.m-6 {
+  margin: 6rem !important;
+}
 
-
-
-
-
-
-
-
-/*footer*/
+/* footer */
 footer {
   position: fixed;
   bottom: 0;
   width: 100%;
 }
+

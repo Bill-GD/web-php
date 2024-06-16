@@ -15,3 +15,4 @@ $routes->post('signup-validate', 'SignUp::signup_validate');
 $routes->get('signup/github', 'SignUp::github_signup');
 $routes->get('logout', 'Logout::index');
 $routes->get('error-list', 'ErrorList::index');
+$routes->get('create-issue', 'ErrorList::create');
