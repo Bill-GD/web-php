@@ -8,9 +8,9 @@ class PageComponent {
     <link rel="stylesheet" href="' . Helper::get_resource_path('public/style/bootstrap.min.css') . '">
     <script src="' . Helper::get_resource_path('public/style/bootstrap.bundle.min.js') . '"></script>
     <link rel="stylesheet" href="' . Helper::get_resource_path('public/style/styles.css') . '">
+    <link rel="stylesheet" href="' . Helper::get_resource_path('public/style/error_style.css') . '">
     ';
   }
-
   static function page_header(): string {
     return
       '<style> body { padding-top: 90px; } </style>
@@ -42,6 +42,10 @@ class PageComponent {
 
   static function home_button(): string {
     return '<a class="home-button btn btn-outline-light m-4" href="/">Home</a>';
+  }
+
+  static function page_footer(): string {
+    return '<footer class="bg-dark text-white text-center py-2">© 2024 BugTrackr</footer>';
   }
 
   static private function nav_content(): string {
@@ -110,4 +114,6 @@ class PageComponent {
       ? ''
       : '<img class="bg-image fixed-top z-n1 w-100 h-auto" src="' . Helper::get_resource_path('public/assets/generic_code_bg.png') . '" alt="Code background image">';
   }
+
+
 }
