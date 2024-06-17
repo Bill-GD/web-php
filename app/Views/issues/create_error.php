@@ -45,6 +45,10 @@
                     class="issue_description form-control form-input" placeholder="Add your description here..."
                     required></textarea>
                 </div>
+                
+              </div>
+              <div class="flex-items-center flex-justify-end d-none d-md-flex my-3">
+                  <button type="submit" id="submit-button" class="btn btn-success">Submit new issue</button>
               </div>
 
               <script>
@@ -79,7 +83,45 @@
         </div>
         <div class="Layout-side-bar">
           <div style="position: relative">
-                
+            <div class="sidebar-item">
+              <?= App\Helpers\PageComponent::dropdown(
+                'Assignees',
+                '<h6 class="dropdown-header">Assign up to 10 people to this issue</h6>',
+                // get project members from database
+                [
+                  '
+                  <a class="dropdown-item" href="#">
+                      <i class="fa-solid"></i>
+                      <img  src="https://avatars.githubusercontent.com/u/96820104?s=40" width="20" height="20" />
+                      duongducbinh
+                    </a>'
+                ],
+                'mx-3',
+                'text-white'
+              ) ?>
+              <div class="mx-3 mt-4">None yet</div>
+            </div>
+
+            <div class="sidebar-item border-tb mt-3 pt-3 pb-3">
+              <?= App\Helpers\PageComponent::dropdown(
+                'Projects',
+                '<h6 class="dropdown-header">Projects</h6>',
+                // get project members from database
+                [
+                  '
+                  <a class="dropdown-item" href="#">
+                      <i class="fa-solid"></i>
+                      <img  src="https://avatars.githubusercontent.com/u/96820104?s=40" width="20" height="20" />
+                      duongducbinh
+                    </a>'
+                ],
+                'mx-3',
+                'text-white'
+              ) ?>
+              <div class="mx-3 mt-4">None yet</div>
+            </div>
+
+
           </div>
         </div>
       </div>
@@ -87,5 +129,28 @@
 
   </div>
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $('.dropdown-item').on('click', function () {
+    $(this).find('i').toggleClass('fa-check');
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    // Disable the submit button at the start
+    $('#submit-button').prop('disabled', true);
+  
+    // Enable the submit button only if there is text in the input field
+    $('input[name="issue[title]"]').on('input', function() {
+      if ($(this).val().length > 0) {
+        $('#submit-button').prop('disabled', false);
+      } else {
+        $('#submit-button').prop('disabled', true);
+      }
+    });
+  });
+</script>
 
 </html>
