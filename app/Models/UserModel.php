@@ -27,7 +27,7 @@ class UserModel
     $hashed_password = md5($password);
     $email = DatabaseManager::mysql_escape($email);
 
-    $q_str = "SELECT * FROM `user` WHERE email = :email AND `password` = :hashed_password";
+    $q_str = "SELECT * FROM `user` WHERE email = :email AND `password` = :password";
     $res = DatabaseManager::instance()->query(
       $q_str,
       [
@@ -103,7 +103,7 @@ class UserModel
     $hashed_password = md5($password);
     [$email, $username] = DatabaseManager::mysql_escape([$email, $username]);
     $github_access_token = isset($_COOKIE['github_access_token']) ? self::encode_gh_token($_COOKIE['github_access_token']) : null;
-    $current_time = (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s');
+    $current_time = Helper::get_local_time();
 
     $q_str = "INSERT INTO `user` (email, username, `password`, avatar_url, is_admin, date_created, github_access_token) VALUES
     ('{$email}', '{$username}', '{$hashed_password}', '{$avatar_url}', " . ($is_admin ? 1 : 0) . ", '{$current_time}', '{$github_access_token}')";

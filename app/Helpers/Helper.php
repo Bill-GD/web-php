@@ -14,6 +14,10 @@ class Helper {
     exit;
   }
 
+  static function get_local_time() {
+    return (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s');
+  }
+
   static function get_resource_path(string $relative_path): string {
     if (empty(Globals::$environment)) {
       Globals::init();

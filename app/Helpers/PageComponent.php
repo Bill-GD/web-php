@@ -104,7 +104,7 @@ class PageComponent {
         '<li><hr class="dropdown-divider"></li>',
         '<li><a class="dropdown-item" href="logout">Logout</a></li>',
       ],
-      '',
+      'text-white',
       'nav-link',
     );
   }

@@ -44,6 +44,12 @@
 .navbar-brand {
   font-size: 1.5rem;
 }
+.text-dark-subtle {
+  color: var(--fg-dark-subtle) !important;
+}
+.text-dark-light {
+  color: var(--fg-dark-light) !important;
+}
 
 /* border */
 .border-dark-subtle {
@@ -127,6 +133,20 @@
 .svg-purple {
   fill: var(--fg-purple-light);
   color: var(--fg-purple-light);
+}
+
+/* absolute position */
+.top-25 {
+  top: 25% !important;
+}
+.bottom-40 {
+  bottom: 35% !important;
+}
+.start-25 {
+  left: 25% !important;
+}
+.end-5 {
+  right: 5% !important;
 }
 
 /* margin */

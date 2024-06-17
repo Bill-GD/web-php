@@ -73,9 +73,9 @@ class DatabaseManager {
       throw new \Exception("Invalid query string, must start with SELECT, INSERT, UPDATE or DELETE");
     }
     // filter all token starts with `:`
-    $named_params = array_filter(explode(' ', $query_string), fn($token) => str_starts_with($token, ':'));
+    $named_params = array_filter(preg_split("/[\s\(,]/", $query_string), fn($token) => str_starts_with($token, ':'));
     if (count($named_params) != count($params)) {
-      throw new \Exception("Number of named parameters does not match number of provided parameters");
+      throw new \Exception("Named parameters count does not match provided parameters count, got " . implode('|', $named_params) . ", please contact the devs");
     }
 
     $stmt = $this->conn->prepare($query_string);
