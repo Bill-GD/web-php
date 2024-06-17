@@ -16,3 +16,4 @@ $routes->get('signup/github', 'SignUp::github_signup');
 $routes->get('logout', 'Logout::index');
 $routes->get('error-list', 'ErrorList::index');
 $routes->get('create-issue', 'ErrorList::create');
+$routes->post('create', 'CreateError::create');

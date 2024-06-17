@@ -5,13 +5,15 @@ use App\Database\DatabaseManager;
 use App\Helpers\Helper;
 use PDO;
 
-class UserModel {
+class UserModel
+{
   public string $user_id;
   public string $email;
   public string $username;
   public bool $is_admin;
 
-  function login(string $email, string $password): void {
+  function login(string $email, string $password): void
+  {
     if (empty($email)) {
       throw new \Exception('Email is required');
     }
@@ -42,7 +44,8 @@ class UserModel {
     ]);
   }
 
-  static function register(string $email, string $username, string $password, string $confirm_password, string $avatar_url, bool $is_admin = false): void {
+  static function register(string $email, string $username, string $password, string $confirm_password, string $avatar_url, bool $is_admin = false): void
+  {
     // empty input
     if (empty($email)) {
       throw new \Exception('Email is required');
@@ -102,19 +105,22 @@ class UserModel {
     DatabaseManager::instance()->query($q_str);
   }
 
-  static private function encode_gh_token(string $token): string {
+  static private function encode_gh_token(string $token): string
+  {
     return implode(
       array_map(fn(string $char): string => dechex(ord($char)), str_split($token))
     );
   }
 
-  static private function decode_gh_token(string $token): string {
+  static private function decode_gh_token(string $token): string
+  {
     return implode(
       array_map(fn(string $hex): string => chr(hexdec($hex)), str_split($token, 2))
     );
   }
 
-  static function find_user_by_email(string $email): UserModel {
+  static function find_user_by_email(string $email): UserModel
+  {
     $q_str = "SELECT * FROM `user` WHERE email = '{$email}'";
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
@@ -130,7 +136,8 @@ class UserModel {
     return $new_user;
   }
 
-  static function find_user_by_username(string $username): UserModel {
+  static function find_user_by_username(string $username): UserModel
+  {
     $q_str = "SELECT * FROM `user` WHERE username = '{$username}'";
     $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
 
@@ -144,5 +151,23 @@ class UserModel {
     $new_user->username = $res['username'];
     $new_user->is_admin = $res['is_admin'];
     return $new_user;
+  }
+
+  static function getAllUsers(): array
+  {
+    $q_str = "SELECT * FROM `user`";
+    $res = DatabaseManager::instance()->query($q_str)->fetchAll(PDO::FETCH_ASSOC);
+
+    $users = [];
+    foreach ($res as $user_data) {
+      $new_user = new UserModel();
+      $new_user->user_id = $user_data['user_id'];
+      $new_user->email = $user_data['email'];
+      $new_user->username = $user_data['username'];
+      $new_user->is_admin = $user_data['is_admin'];
+      $users[] = $new_user;
+    }
+
+    return $users;
   }
 }

@@ -119,6 +119,7 @@
         <div class="d-flex flex-column m-6 align-items-center justify-content-center">
           <?= App\Helpers\PageComponent::open_issue_svg(24) ?>
           <h3>There aren’t any open issues.</h3>
+          
           <!-- put issues here based on filters -->
         </div>
       </div>

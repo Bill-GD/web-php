@@ -29,6 +29,11 @@ body {
   border-bottom: 1px solid #30363d !important;
 }
 
+.border-b{
+  border-bottom: 1px solid #30363d !important;
+
+}
+
 .Button {
   align-items: center;
   background-color: initial;
