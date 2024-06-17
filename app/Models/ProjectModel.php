@@ -89,7 +89,7 @@ class ProjectModel {
       "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner, COUNT(i.issue_id) as issue_count
       FROM project as p
       JOIN project_role as r ON p.project_id = r.project_id
-      JOIN user as u ON u.user_id = r.user_id
+      JOIN user as u ON u.user_id = p.owner
       LEFT JOIN issue as i ON p.project_id = i.project_id
       WHERE r.user_id = :user_id
       GROUP BY p.project_id, p.project_name, p.`description`, p.date_created, u.username",

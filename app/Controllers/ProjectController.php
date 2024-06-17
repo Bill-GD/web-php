@@ -15,6 +15,7 @@ class ProjectController extends BaseController {
     }
     $user_id = $is_admin ? null : $_COOKIE['user_id'];
     $p = ProjectModel::get_owned_projects($user_id);
+    array_push($p, ...ProjectModel::get_joined_projects($user_id));
 
     if (isset($_GET['p'])) {
       $p = array_filter($p, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['p'])));
@@ -37,7 +38,6 @@ class ProjectController extends BaseController {
     }
     $user_id = $_COOKIE['user_id'];
     $data['projects'] = $filter === 'joined' ? ProjectModel::get_joined_projects($user_id) : ProjectModel::get_owned_projects($user_id);
-    // add filter to data, first letter capital, rest lower case, dash in front, with white spaces
     $data['filter'] = ' - ' . ucfirst($filter);
 
     return view('project/project_list', $data);
