@@ -155,7 +155,7 @@ body {
 }
 
 .comment-box-header {
-  display: flex;
+  padding: auto;
   height: 38px;
   background-color: #161b22;
   border-top-left-radius: 6px;
@@ -168,11 +168,14 @@ body {
 
 .tablink {
   color: #e6edf3;
-  border: 0;
+  border: 1px solid #30363d;
+  padding: auto 10px;
+  border-bottom: none;
   display: inline-block;
   flex-shrink: 0;
-  line-height: 23px;
+  line-height: 38px;
   width: 67px;
+  background-color: #0d1117;
 }
 
 .issue_description {

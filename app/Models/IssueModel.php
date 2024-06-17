@@ -2,9 +2,13 @@
 namespace App\Models;
 
 use App\Database\DatabaseManager;
+use DateTime;
 
-class IssueModel {
+class IssueModel
+{
 
+    public int $project_id;
+    public int $issue_id;
     public string $title;
     public string $description;
     public string $status; // 'error', 'canceled', 'pending', 'tested', 'closed'
@@ -14,7 +18,8 @@ class IssueModel {
     public DateTime $date_created;
     public DateTime $date_updated;
 
-    public function __construct(string $title, string $description, string $status, string $priority, int $assignee, int $issuer, DateTime $date_created, DateTime $date_updated) {
+    public function __construct(string $title, string $description, string $status, string $priority, int $assignee, int $issuer, DateTime $date_created, DateTime $date_updated, int $project_id, int $issue_id)
+    {
         $this->title = $title;
         $this->description = $description;
         $this->status = $status;
@@ -23,7 +28,7 @@ class IssueModel {
         $this->issuer = $issuer;
         $this->date_created = $date_created;
         $this->date_updated = $date_updated;
+        $this->project_id = $project_id;
+        $this->issue_id = $issue_id;
     }
-
-    
 }
