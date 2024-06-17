@@ -9,12 +9,15 @@
   <body class="bg-dark-subtle">
     <?= App\Helpers\PageComponent::page_header() ?>
     <div class="clearfix container px-lg-5 mt-2">
+      <?php if (isset($_GET['error_message'])) {
+        echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
+      } ?>
       <div class="d-flex gx-2">
-        <div class="input-group" style="max-width:fit-content;min-width:fit-content;">
+        <div class="input-group me-2" style="max-width:fit-content;min-width:fit-content;">
           <a href="#" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle" role="button">Created</a>
           <a href="#" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle" role="button">Joined</a>
         </div>
-        <form action="" method="get" class="w-100 mx-2">
+        <form action="" method="get" class="w-100 me-2">
           <input type="text" name="q" class="form-control form-input h-100 bg-dark-light" placeholder="Search project">
         </form>
         <a href="create-project" role="button" class="btn btn-success col-2"> New project </a>
@@ -37,7 +40,7 @@
 
             $content = <<<HTML
               <div class="ps-4 pt-3 pb-4 position-relative">
-                <a class="link-deco-hover fs-3" href="#">{$project->project_name}</a>
+                <a class="link-deco-hover fs-3" href="/public/projects/$project->project_id">{$project->project_name}</a>
                 <div class="text-dark-light fs-5">{$project->description}</div>
                 <div class="text-dark-light">
                   <i class="fa-solid fa-user text-dark-light"></i>  {$project->owner}

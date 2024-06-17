@@ -10,11 +10,12 @@ class ProjectController extends BaseController {
     $is_admin = Helper::is_admin();
     $data = ['is_logged_in' => $is_logged_in];
 
-    if ($is_logged_in) {
-      $user_id = $is_admin ? null : $_COOKIE['user_id'];
-
-      $data['projects'] = ProjectModel::get_all_projects($user_id);
+    if (!$is_logged_in) {
+      Helper::redirect_to('/');
     }
+    $user_id = $is_admin ? null : $_COOKIE['user_id'];
+    $data['projects'] = ProjectModel::get_all_projects($user_id);
+
     return view('project/project_list', $data);
   }
 
@@ -36,5 +37,20 @@ class ProjectController extends BaseController {
       Helper::redirect_to('create-project?error_message=' . urlencode($e->getMessage()));
     }
     Helper::redirect_to('projects');
+  }
+
+  public function view_project(string $project_id): string {
+    if (!Helper::is_logged_in()) {
+      Helper::redirect_to('/');
+    }
+    if (Helper::is_admin()) {
+      Helper::redirect_to('projects?error_message=' . urlencode('Admins cannot view project'));
+    }
+
+    $p = ProjectModel::get_project($project_id);
+    // get project issues
+
+    $data = ['project' => $p];
+    return view('project/view_project', $data);
   }
 }

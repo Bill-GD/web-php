@@ -5,16 +5,6 @@ use App\Database\DatabaseManager;
 use App\Helpers\Helper;
 
 class ProjectModel {
-  // create table if not exists project (
-  //   project_id int auto_increment primary key,
-  //   project_name varchar(50) not null,
-  //   `description` text not null,
-  //   date_created datetime not null,
-  //   `owner` int not null,
-  //   foreign key (`owner`) references `user` (user_id) on delete cascade -- delete account -> delete all owned projects
-  // );
-
-  // create the fields
   public int $project_id;
   public string $project_name;
   public string $description;
@@ -45,6 +35,9 @@ class ProjectModel {
     }
     if (strlen($project_name) > 50) {
       throw new \Exception('Project name must be less than 50 characters');
+    }
+    if (!preg_match("/^[a-zA-Z0-9 _-]*$/", $project_name)) {
+      throw new \Exception('Only letters, numbers, white space, underscore, hyphen allowed in project name');
     }
 
     [$project_name, $description] = DatabaseManager::mysql_escape([$project_name, $description]);
@@ -82,5 +75,29 @@ class ProjectModel {
       );
     }
     return $projects;
+  }
+
+  static function get_project(int $project_id): ProjectModel {
+    $res = DatabaseManager::instance()->query(
+      "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner, COUNT(i.issue_id) as issue_count
+      FROM project as p
+      JOIN user as u ON p.owner = u.user_id
+      LEFT JOIN issue as i ON p.project_id = i.project_id
+      WHERE p.project_id = :project_id
+      GROUP BY p.project_id, p.project_name, p.`description`, p.date_created, u.username",
+      ['project_id' => $project_id]
+    )->fetch();
+
+    if (!$res) {
+      throw new \Exception('Project not found');
+    }
+    return new ProjectModel(
+      $res['project_id'],
+      $res['project_name'],
+      $res['description'],
+      $res['date_created'],
+      $res['owner'],
+      $res['issue_count'],
+    );
   }
 }
