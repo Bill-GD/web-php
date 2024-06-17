@@ -14,8 +14,10 @@ class ProjectController extends BaseController {
       Helper::redirect_to('/');
     }
     $user_id = $is_admin ? null : $_COOKIE['user_id'];
+
     $p = ProjectModel::get_owned_projects($user_id);
     array_push($p, ...ProjectModel::get_joined_projects($user_id));
+    // $p = array_unique($p, SORT_REGULAR); // filter duplicated project_id
 
     if (isset($_GET['p'])) {
       $p = array_filter($p, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['p'])));
@@ -44,13 +46,13 @@ class ProjectController extends BaseController {
   }
 
   public function create(): string {
+    if (Helper::is_admin()) {
+      Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot create project'));
+    }
     return view('project/create_project');
   }
 
   public function create_project(): void {
-    if (Helper::is_admin()) {
-      Helper::redirect_to('create-project?error_message=' . urlencode('Admins cannot create project'));
-    }
     try {
       $project_name = $_POST['project_name'];
       $description = $_POST['project_description'];
@@ -58,7 +60,7 @@ class ProjectController extends BaseController {
 
       ProjectModel::create_project($project_name, $description, $owner);
     } catch (\Exception $e) {
-      Helper::redirect_to('create-project?error_message=' . urlencode($e->getMessage()));
+      Helper::redirect_to('/create-project?error_message=' . urlencode($e->getMessage()));
     }
     Helper::redirect_to('projects');
   }
@@ -68,7 +70,7 @@ class ProjectController extends BaseController {
       Helper::redirect_to('/');
     }
     if (Helper::is_admin()) {
-      Helper::redirect_to('projects?error_message=' . urlencode('Admins cannot view project'));
+      Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot view project'));
     }
     $data = [
       'project_id' => $project_id,

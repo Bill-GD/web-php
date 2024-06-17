@@ -84,9 +84,13 @@ class ProjectModel {
     return $projects;
   }
 
-  static function get_joined_projects(int $user_id): array {
+  static function get_joined_projects(?int $user_id): array {
+    if ($user_id == null) {
+      return [];
+    }
+    
     $res = DatabaseManager::instance()->query(
-      "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner, COUNT(i.issue_id) as issue_count
+      "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner_name, p.owner, COUNT(i.issue_id) as issue_count
       FROM project as p
       JOIN project_role as r ON p.project_id = r.project_id
       JOIN user as u ON u.user_id = p.owner
@@ -98,12 +102,15 @@ class ProjectModel {
 
     $projects = [];
     foreach ($res as $project) {
+      if ($project['owner'] == $user_id) {
+        continue;
+      }
       $projects[] = new ProjectModel(
         $project['project_id'],
         $project['project_name'],
         $project['description'],
         $project['date_created'],
-        $project['owner'],
+        $project['owner_name'],
         $project['issue_count'],
       );
     }
@@ -145,8 +152,8 @@ class ProjectModel {
 
     $user_id = $user_info->user_id;
     $res = DatabaseManager::instance()->query(
-      "SELECT user_id FROM project_role WHERE user_id = :user_id",
-      ['user_id' => $user_id]
+      "SELECT user_id FROM project_role WHERE user_id = :user_id and project_id = :project_id",
+      ['user_id' => $user_id, 'project_id' => $project_id]
     )->fetch();
 
     if (!$res) {

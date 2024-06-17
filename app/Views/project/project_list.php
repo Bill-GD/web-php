@@ -16,7 +16,7 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
       <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
       } ?>
-      <div class="d-flex">
+      <div class="d-flex mt-3">
         <div class="input-group me-2" style="max-width:fit-content;min-width:fit-content;">
           <a href="/public/projects" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
             role="button">All</a>
@@ -29,7 +29,8 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
           <input type="text" name="p" class="form-control form-input h-100 bg-dark-light"
             value="<?= isset($_GET['p']) ? $_GET['p'] : '' ?>" placeholder="Search project">
         </form>
-        <a href="create-project" role="button" class="btn btn-success col-2"> New project </a>
+        <a <?= \App\Helpers\Helper::is_admin() ? '' : 'href="/public/create-project"' ?> role="button"
+          class="btn btn-success col-2 <?= \App\Helpers\Helper::is_admin() ? 'disabled' : '' ?>"> New project </a>
       </div>
 
       <div class="mt-3 border border-dark-subtle rounded-2">
@@ -51,14 +52,16 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
             $date = date_format($date, 'H:i M d, Y');
 
             $content = <<<HTML
-              <div class="ps-4 pt-3 pb-4 position-relative">
-                <a class="link-deco-hover fs-3" href="/public/projects/$project->project_id">{$project->project_name}</a>
-                <div class="text-dark-light fs-5">{$project->description}</div>
-                <div class="text-dark-light">
-                  <i class="fa-solid fa-user text-dark-light"></i>  {$project->owner}
-                  <i class="fa-solid fa-clock text-dark-light ms-3"></i>  {$date}
+              <div class="pt-3 pb-4 row">
+                <div class="col mx-4">
+                  <a class="link-deco-hover fs-3" href="/public/projects/$project->project_id">{$project->project_name}</a>
+                  <div class="text-dark-light fs-5 flex-wrap">{$project->description}</div>
+                  <div class="text-dark-light">
+                    <i class="fa-solid fa-user text-dark-light"></i>  {$project->owner}
+                    <i class="fa-solid fa-clock text-dark-light ms-3"></i>  {$date}
+                  </div>
                 </div>
-                <div class="position-absolute text-white bottom-40 end-5 fs-4">
+                <div class="col-auto text-white fs-4 ms-4 me-5 align-self-center">
                   {$project->issue_count}
                   <i class="fa-solid fa-bug"></i>
                 </div>

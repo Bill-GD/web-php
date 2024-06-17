@@ -135,20 +135,6 @@
   color: var(--fg-purple-light);
 }
 
-/* absolute position */
-.top-25 {
-  top: 25% !important;
-}
-.bottom-40 {
-  bottom: 35% !important;
-}
-.start-25 {
-  left: 25% !important;
-}
-.end-5 {
-  right: 5% !important;
-}
-
 /* width */
 .w-40 {
   width: 40% !important;

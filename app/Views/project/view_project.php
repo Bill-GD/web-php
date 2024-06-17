@@ -41,11 +41,11 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
       } ?>
       <?php if ($view_overview) { ?>
         <div class="row gx-5">
-          <div class="col h-100">
-            <h3>
+          <div class="col">
+            <h2>
               <?= $project->project_name ?>
-            </h3>
-            <p>
+            </h2>
+            <p class="my-4">
               <?= $project->description ?>
             </p>
             <p class="text-dark-light">
