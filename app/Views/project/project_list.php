@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Projects</title>
+    <title>Projects<?= isset($filter) ? $filter : ' - All' ?></title>
     <?= App\Helpers\PageComponent::import_styles() ?>
     <link rel="stylesheet" href="<?= App\Helpers\Helper::get_resource_path('public/style/error_style.css') ?>">
   </head>
@@ -14,17 +14,23 @@
       } ?>
       <div class="d-flex gx-2">
         <div class="input-group me-2" style="max-width:fit-content;min-width:fit-content;">
-          <a href="#" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle" role="button">Created</a>
-          <a href="#" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle" role="button">Joined</a>
+          <a href="/public/projects" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
+            role="button">All</a>
+          <a href="/public/projects/created" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
+            role="button">Created</a>
+          <a href="/public/projects/joined" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
+            role="button">Joined</a>
         </div>
-        <form action="" method="get" class="w-100 me-2">
-          <input type="text" name="q" class="form-control form-input h-100 bg-dark-light" placeholder="Search project">
+        <form action="/public/projects" method="get" class="w-100 me-2">
+          <input type="text" name="p" class="form-control form-input h-100 bg-dark-light"
+            value="<?= isset($_GET['p']) ? $_GET['p'] : '' ?>" placeholder="Search project">
         </form>
         <a href="create-project" role="button" class="btn btn-success col-2"> New project </a>
       </div>
 
       <div class="mt-3 border border-dark-subtle rounded-2">
         <?php
+        assert(isset($projects) & is_array($projects), 'Projects must be an array');
         $count = count($projects);
         if ($count === 0) {
           echo <<<HTML
@@ -33,8 +39,10 @@
             </div>
           HTML;
         } else {
-          for ($i = 0; $i < $count; $i++) {
-            $project = $projects[$i];
+          assert($count > 0, 'There must be at least one project to display');
+          $i = -1;
+          foreach ($projects as $project) {
+            $i++;
             $date = date_create($project->date_created);
             $date = date_format($date, 'H:i M d, Y');
 
