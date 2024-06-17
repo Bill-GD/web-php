@@ -25,8 +25,8 @@
         $count = count($projects);
         if ($count === 0) {
           echo <<<HTML
-            <div class="text-center m-6">
-              <h2 class="text-muted">No projects found</h2>
+            <div class="text-center text-white m-6">
+              <h3>No projects found</h3>
             </div>
           HTML;
         } else {
@@ -36,10 +36,16 @@
             $date = date_format($date, 'M d, Y');
 
             $content = <<<HTML
-              <div class="px-4 py-3">
+              <div class="ps-4 pt-3 pb-4 position-relative">
                 <a class="link-deco-hover fs-3" href="#">{$project->project_name}</a>
-                <div class="text-white">
-                  {$project->owner}
+                <div class="text-dark-light fs-5">{$project->description}</div>
+                <div class="text-dark-light">
+                  <i class="fa-solid fa-user text-dark-light"></i>  {$project->owner}
+                  <i class="fa-solid fa-clock text-dark-light ms-3"></i>  {$date}
+                </div>
+                <div class="position-absolute text-white bottom-40 end-5 fs-4">
+                  {$project->issue_count}
+                  <i class="fa-solid fa-bug"></i>
                 </div>
               </div>
             HTML;

@@ -25,7 +25,7 @@ class UserModel {
     $hashed_password = md5($password);
     $email = DatabaseManager::mysql_escape($email);
 
-    $q_str = "SELECT * FROM `user` WHERE email = :email AND `password` = :hashed_password";
+    $q_str = "SELECT * FROM `user` WHERE email = :email AND `password` = :password";
     $res = DatabaseManager::instance()->query(
       $q_str,
       [
