@@ -24,8 +24,15 @@
 .nav-link.active {
   font-weight: bold;
 }
-a {
+.link-no-deco {
   text-decoration: none;
+}
+.link-deco-hover {
+  text-decoration: none;
+}
+.link-deco-hover:hover {
+  text-decoration: underline;
+  color: #0d6eee;
 }
 
 /* foreground */
@@ -46,6 +53,23 @@ a {
   border-color: var(--fg-dark-light) !important;
 }
 
+/* button */
+.btn {
+  padding: 0.5rem 0.75rem !important;
+}
+.btn-dark {
+  background-color: var(--bg-dark) !important;
+}
+.btn-success {
+  background-color: #009422 !important;
+}
+.btn-success:hover {
+  background-color: var(--fg-green-light) !important;
+}
+.home-button {
+  position: sticky;
+}
+
 /* background */
 .bg-dark {
   background-color: var(--bg-dark) !important;
@@ -58,20 +82,6 @@ a {
 }
 .bg-image {
   opacity: 0.3;
-}
-
-/* button */
-.btn {
-  padding: 0.5rem 0.75rem !important;
-}
-.btn-success {
-  background-color: #009422 !important;
-}
-.btn-success:hover {
-  background-color: var(--fg-green-light) !important;
-}
-.home-button {
-  position: sticky;
 }
 
 /* form */

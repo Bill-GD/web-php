@@ -38,6 +38,21 @@ class PageComponent {
     ';
   }
 
+  static function table_with_header(string $table_classes = '', string $header, string $content): string {
+    return
+      '<div class="border border-dark-subtle rounded-2 ' . $table_classes . '">
+        <div class="bg-dark-light p-3 border-bottom rounded-top-2 border-dark-subtle">
+          <div class="d-flex">
+            ' . $header . '
+          </div>
+        </div>
+        <div class="d-flex flex-column m-6 align-items-center justify-content-center">
+          ' . $content . '
+        </div>
+      </div>
+      ';
+  }
+
   static function home_button(): string {
     return '<a class="home-button btn btn-outline-light m-4" href="/">Home</a>';
   }
@@ -58,8 +73,8 @@ class PageComponent {
 
     $links = [
       // title => [href, enabled, is_active]
-      'Projects' => ['#', false, str_contains($access_uri, 'projects')],
-      'Issues' => ['error-list', true, str_contains($access_uri, 'error-list')],
+      'Projects' => ['projects', true, str_contains($access_uri, 'projects')],
+      'Issues' => ['issues', true, str_contains($access_uri, 'issues')],
     ];
 
     $nav_links = '';
@@ -94,18 +109,6 @@ class PageComponent {
     );
   }
 
-  static function dropdown(string $title, string $dropdown_header = '', array $items, string $extra_dropdown_classes = '', string $extra_title_classes = ''): string {
-    $dropdown_items = implode(array_map(fn($item) => '<li>' . $item . '</li>', $items));
-    return
-      '<div class="dropdown ' . $extra_dropdown_classes . '">
-        <a class="dropdown-toggle ' . $extra_title_classes . '" data-bs-toggle="dropdown" role="button">' . $title . '</a>
-        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end border border-dark-light rounded-1">
-          <li>' . $dropdown_header . '</li>
-          ' . $dropdown_items . '
-        </ul>
-      </div>';
-  }
-
   static private function sign_up_in_buttons(): string {
     return
       '<ul class="nav col-2">
@@ -118,7 +121,19 @@ class PageComponent {
       </ul>';
   }
 
-  static function code_background(bool $logged_in): string {
+  static function dropdown(string $title, string $dropdown_header = '', array $items, string $extra_dropdown_classes = '', string $extra_title_classes = ''): string {
+    $dropdown_items = implode(array_map(fn($item) => '<li>' . $item . '</li>', $items));
+    return
+      '<div class="dropdown ' . $extra_dropdown_classes . '">
+        <a class="dropdown-toggle ' . $extra_title_classes . ' link-no-deco" data-bs-toggle="dropdown" role="button">' . $title . '</a>
+        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end border border-dark-light rounded-1">
+          <li>' . $dropdown_header . '</li>
+          ' . $dropdown_items . '
+        </ul>
+      </div>';
+  }
+
+  static function home_background(bool $logged_in): string {
     return
       $logged_in
       ? ''

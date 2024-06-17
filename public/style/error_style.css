@@ -61,7 +61,7 @@ body {
   position: relative;
 }
 
-.subnav-search-icon {
+.search-icon-prefix {
   position: absolute;
   top: 14px;
   left: 70px;
@@ -107,7 +107,6 @@ body {
 .input-contrast:focus {
   background-color: #0d1117;
 }
-
 
 /* CREATE ISSUES */
 
