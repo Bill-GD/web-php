@@ -22,7 +22,7 @@ $routes->get('projects', 'ProjectController::index');
 $routes->get('projects/(:num)', 'ProjectController::view_project/$1');
 $routes->post('create-new-project', 'ProjectController::create_project');
 
-$routes->get('error-list', 'ErrorList::index');
+// $routes->get('error-list', 'ErrorList::index');
 $routes->get('issues', 'ErrorList::index');
 $routes->get('create-issue', 'ErrorList::create');
 $routes->post('create', 'CreateError::create');

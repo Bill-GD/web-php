@@ -73,8 +73,8 @@ class PageComponent {
 
     $links = [
       // title => [href, enabled, is_active]
-      'Projects' => ['projects', true, str_contains($access_uri, 'projects')],
-      'Issues' => ['issues', true, str_contains($access_uri, 'issues')],
+      'Projects' => ['/public/projects', true, str_contains($access_uri, 'projects')],
+      'Issues' => ['/public/issues', true, str_contains($access_uri, 'issues')],
     ];
 
     $nav_links = '';
