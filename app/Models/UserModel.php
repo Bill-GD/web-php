@@ -25,8 +25,14 @@ class UserModel {
     $hashed_password = md5($password);
     $email = DatabaseManager::mysql_escape($email);
 
-    $q_str = "SELECT * FROM `user` WHERE email = '{$email}' AND `password` = '{$hashed_password}'";
-    $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
+    $q_str = "SELECT * FROM `user` WHERE email = :email AND `password` = :hashed_password";
+    $res = DatabaseManager::instance()->query(
+      $q_str,
+      [
+        'email' => $email,
+        'password' => $hashed_password,
+      ]
+    )->fetch(PDO::FETCH_ASSOC);
 
     if (!$res || count($res) <= 0) {
       throw new \Exception("Wrong email or password");
@@ -42,7 +48,7 @@ class UserModel {
     ]);
   }
 
-  static function register(string $email, string $username, string $password, string $confirm_password, string $avatar_url, bool $is_admin = false): void {
+  function register(string $email, string $username, string $password, string $confirm_password, string $avatar_url, bool $is_admin = false): void {
     // empty input
     if (empty($email)) {
       throw new \Exception('Email is required');
@@ -108,34 +114,33 @@ class UserModel {
     );
   }
 
+  // when needed to use the token
   static private function decode_gh_token(string $token): string {
     return implode(
       array_map(fn(string $hex): string => chr(hexdec($hex)), str_split($token, 2))
     );
   }
 
-  static function find_user_by_email(string $email): UserModel {
-    $q_str = "SELECT * FROM `user` WHERE email = '{$email}'";
-    $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
-
-    if (!$res) {
-      throw new \Exception('User not found');
+  static function find_user(?string $email = null, ?string $username = null): ?UserModel {
+    if (empty($email) && empty($username)) {
+      throw new \Exception('Email or username is required');
     }
+    $q_str = "SELECT * FROM `user` WHERE ";
+    $q_str .= $email === null ? '' : "email = '{$email}'";
+    $q_str .= $email !== null && $username !== null ? ' AND ' : '';
+    $q_str .= $username === null ? '' : "username = '{$username}'";
 
-    $new_user = new UserModel();
-    $new_user->user_id = $res['user_id'];
-    $new_user->email = $res['email'];
-    $new_user->username = $res['username'];
-    $new_user->is_admin = $res['is_admin'];
-    return $new_user;
-  }
-
-  static function find_user_by_username(string $username): UserModel {
-    $q_str = "SELECT * FROM `user` WHERE username = '{$username}'";
-    $res = DatabaseManager::instance()->query($q_str)->fetch(PDO::FETCH_ASSOC);
+    $res = DatabaseManager::instance()->query(
+      $q_str,
+      array_filter(
+        ['email' => $email, 'username' => $username],
+        fn($e) => $e !== null,
+      ),
+    )->fetch(PDO::FETCH_ASSOC);
 
     if (!$res) {
-      throw new \Exception('User not found');
+      return null;
+      // throw new \Exception('User not found');
     }
 
     $new_user = new UserModel();

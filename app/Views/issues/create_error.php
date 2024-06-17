@@ -126,31 +126,3 @@
         </div>
       </div>
     </form>
-
-  </div>
-</body>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-  $('.dropdown-item').on('click', function () {
-    $(this).find('i').toggleClass('fa-check');
-  });
-</script>
-
-<script>
-  $(document).ready(function() {
-    // Disable the submit button at the start
-    $('#submit-button').prop('disabled', true);
-  
-    // Enable the submit button only if there is text in the input field
-    $('input[name="issue[title]"]').on('input', function() {
-      if ($(this).val().length > 0) {
-        $('#submit-button').prop('disabled', false);
-      } else {
-        $('#submit-button').prop('disabled', true);
-      }
-    });
-  });
-</script>
-
-</html>
