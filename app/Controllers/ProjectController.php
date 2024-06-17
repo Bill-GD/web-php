@@ -52,8 +52,8 @@ class ProjectController extends BaseController {
       Helper::redirect_to('create-project?error_message=' . urlencode('Admins cannot create project'));
     }
     try {
-      $project_name = $_GET['project_name'];
-      $description = $_GET['project_description'];
+      $project_name = $_POST['project_name'];
+      $description = $_POST['project_description'];
       $owner = $_COOKIE['user_id'];
 
       ProjectModel::create_project($project_name, $description, $owner);
@@ -63,18 +63,36 @@ class ProjectController extends BaseController {
     Helper::redirect_to('projects');
   }
 
-  public function view_project(string $project_id): string {
+  public function view_project(string $project_id, ?string $tab = null): string {
     if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
     if (Helper::is_admin()) {
       Helper::redirect_to('projects?error_message=' . urlencode('Admins cannot view project'));
     }
+    $data = [
+      'project_id' => $project_id,
+      'project' => ProjectModel::get_project($project_id),
+    ];
 
-    $p = ProjectModel::get_project($project_id);
-    // get project issues
-
-    $data = ['project' => $p];
+    if ($tab === 'members') {
+      $data['members'] = ProjectModel::get_members($project_id);
+    }
     return view('project/view_project', $data);
+  }
+
+  public function add_member(string $project_id) {
+    if (Helper::is_admin()) {
+      Helper::redirect_to("/projects/{$project_id}/members?error_message=" . urlencode('Admins cannot add members'));
+    }
+
+    try {
+      $email = $_POST['add_email'];
+      $role = $_POST['new_member_role'];
+      ProjectModel::add_member($project_id, $email, $role);
+    } catch (\Exception $e) {
+      Helper::redirect_to("/projects/{$project_id}/members?error_message=" . urlencode($e->getMessage()));
+    }
+    Helper::redirect_to("/projects/{$project_id}/members");
   }
 }

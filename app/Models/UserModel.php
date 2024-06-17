@@ -5,9 +5,8 @@ use App\Database\DatabaseManager;
 use App\Helpers\Helper;
 use PDO;
 
-class UserModel
-{
-  public string $user_id;
+class UserModel {
+  public int $user_id;
   public string $email;
   public string $username;
   public bool $is_admin;
@@ -128,10 +127,10 @@ class UserModel
     if (empty($email) && empty($username)) {
       throw new \Exception('Email or username is required');
     }
-    $q_str = "SELECT * FROM `user` WHERE ";
-    $q_str .= $email === null ? '' : "email = '{$email}'";
+    $q_str = "SELECT * FROM user WHERE ";
+    $q_str .= $email === null ? '' : "email = :email";
     $q_str .= $email !== null && $username !== null ? ' AND ' : '';
-    $q_str .= $username === null ? '' : "username = '{$username}'";
+    $q_str .= $username === null ? '' : "username = :username";
 
     $res = DatabaseManager::instance()->query(
       $q_str,

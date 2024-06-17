@@ -1,8 +1,12 @@
+<?php
+$title = 'Projects';
+$title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Projects<?= isset($filter) ? $filter : ' - All' ?></title>
+    <title><?= $title ?></title>
     <?= App\Helpers\PageComponent::import_styles() ?>
     <link rel="stylesheet" href="<?= App\Helpers\Helper::get_resource_path('public/style/error_style.css') ?>">
   </head>
@@ -12,7 +16,7 @@
       <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
       } ?>
-      <div class="d-flex gx-2">
+      <div class="d-flex">
         <div class="input-group me-2" style="max-width:fit-content;min-width:fit-content;">
           <a href="/public/projects" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
             role="button">All</a>
@@ -61,16 +65,9 @@
               </div>
             HTML;
 
-            if ($i < $count - 1) {
-              echo <<<HTML
-                <div class="border-bottom border-dark-subtle">
-                  {$content}
-                </div>
-              HTML;
-              continue;
-            }
+            $border = $i < $count - 1 ? 'border-bottom border-dark-subtle' : '';
             echo <<<HTML
-              <div class="border-dark-subtle">
+              <div class="$border">
                 {$content}
               </div>
             HTML;

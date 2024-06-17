@@ -20,6 +20,8 @@ $routes->get('logout', 'Logout::index');
 $routes->get('projects', 'ProjectController::index');
 $routes->get('projects/(joined|created)', 'ProjectController::filter/$1');
 $routes->get('projects/(:num)', 'ProjectController::view_project/$1');
+$routes->get('projects/(:num)/(members|settings)', 'ProjectController::view_project/$1/$2');
+$routes->post('projects/(:num)/add-member', 'ProjectController::add_member/$1');
 $routes->get('create-project', 'ProjectController::create');
 $routes->post('create-new-project', 'ProjectController::create_project');
 

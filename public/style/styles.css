@@ -149,6 +149,11 @@
   right: 5% !important;
 }
 
+/* width */
+.w-40 {
+  width: 40% !important;
+}
+
 /* margin */
 .m-6 {
   margin: 6rem !important;

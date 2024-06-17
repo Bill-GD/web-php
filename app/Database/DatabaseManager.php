@@ -62,6 +62,10 @@ class DatabaseManager {
     return $this->conn->query("SELECT version()")->fetch()[0];
   }
 
+  function get_last_id(): int {
+    return $this->conn->lastInsertId();
+  }
+
   /**
    * Wraps the PDO query calls in a single function.
    * @param string $query_string The query string to execute, can use `:param_name` for named parameters, or plain query string.
@@ -74,8 +78,15 @@ class DatabaseManager {
     }
     // filter all token starts with `:`
     $named_params = array_filter(preg_split("/[\s\(,]/", $query_string), fn($token) => str_starts_with($token, ':'));
-    if (count($named_params) != count($params)) {
-      throw new \Exception("Named parameters count does not match provided parameters count, got " . implode('|', $named_params) . ", please contact the devs");
+    $named_params_count = count($named_params);
+    $provided_params_count = count($params);
+    if ($named_params_count !== $provided_params_count) {
+      throw new \Exception(
+        "Named parameters count does not match provided parameters count.<br>
+        Query: {$query_string}<br>
+        Named parameters ({$named_params_count}): " . implode('|', $named_params) . "<br>
+        Provided parameters ({$provided_params_count}): " . implode('|', array_keys($params)) . "<br>"
+      );
     }
 
     $stmt = $this->conn->prepare($query_string);

@@ -44,8 +44,15 @@ class ProjectModel {
 
     DatabaseManager::instance()->query(
       "INSERT INTO project (project_name, `description`, date_created, `owner`)
-      VALUES (:project_name, :description, '". Helper::get_local_time() ."', :owner)",
+      VALUES (:project_name, :description, '" . Helper::get_local_time() . "', :owner)",
       ['project_name' => $project_name, 'description' => $description, 'owner' => $owner]
+    );
+
+    $project_id = DatabaseManager::instance()->get_last_id();
+    DatabaseManager::instance()->query(
+      "INSERT INTO project_role (project_id, user_id, user_role)
+      VALUES (:project_id, :user_id, :owner)",
+      ['project_id' => $project_id, 'user_id' => $owner, 'owner' => ProjectRole::owner->name]
     );
   }
 
@@ -125,5 +132,62 @@ class ProjectModel {
       $res['owner'],
       $res['issue_count'],
     );
+  }
+
+  static function add_member(int $project_id, string $email, string $role): void {
+    if (empty($email)) {
+      throw new \Exception('Email is required');
+    }
+    $user_info = UserModel::find_user($email);
+    if (!$user_info) {
+      throw new \Exception('User not found');
+    }
+
+    $user_id = $user_info->user_id;
+    $res = DatabaseManager::instance()->query(
+      "SELECT user_id FROM project_role WHERE user_id = :user_id",
+      ['user_id' => $user_id]
+    )->fetch();
+
+    if (!$res) {
+      ProjectRole::find_by_name($role);
+
+      DatabaseManager::instance()->query(
+        "INSERT INTO project_role (project_id, user_id, user_role) VALUES (:project_id, :user_id, :role)",
+        ['project_id' => $project_id, 'user_id' => $user_id, 'role' => $role]
+      );
+      return;
+    }
+    throw new \Exception('User is already a member');
+  }
+
+  static function get_members(int $project_id) {
+    $res = DatabaseManager::instance()->query(
+      "SELECT u.avatar_url, u.username, u.email, r.user_role
+      FROM project_role as r
+      JOIN user as u ON r.user_id = u.user_id
+      WHERE r.project_id = :project_id",
+      ['project_id' => $project_id]
+    )->fetchAll();
+
+    $members = [];
+    foreach ($res as $member) {
+      $members[] = [
+        'avatar_url' => $member['avatar_url'],
+        'username' => $member['username'],
+        'email' => $member['email'],
+        'user_role' => ProjectRole::find_by_name($member['user_role']),
+      ];
+    }
+    return $members;
+  }
+
+  static function is_member_owner(int $project_id, int $user_id): bool {
+    $res = DatabaseManager::instance()->query(
+      "SELECT user_role FROM project_role WHERE project_id = :project_id AND user_id = :user_id",
+      ['project_id' => $project_id, 'user_id' => $user_id]
+    )->fetch();
+
+    return $res['user_role'] === ProjectRole::owner->name;
   }
 }

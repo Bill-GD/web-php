@@ -9,7 +9,7 @@ class Helper {
       header("Location: {$route}");
       exit;
     }
-    $uri = str_contains($_SERVER['REQUEST_URI'], 'public') ? 'public' : '';
+    $uri = str_contains($_SERVER['REQUEST_URI'], 'public') ? '/public' : '';
     header("Location: {$uri}{$route}");
     exit;
   }
