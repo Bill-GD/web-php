@@ -35,7 +35,7 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
         </div>
       HTML
     ) ?>
-    <div class="clearfix container text-white mt-5 w-40">
+    <div class="clearfix container text-white mt-5 <?= $view_overview ? '' : 'w-40' ?>">
       <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
       } ?>
@@ -52,15 +52,57 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
               Owner: <?= $project->owner ?>
             </p>
           </div>
-          <div class="col h-100 d-flex justify-content-center">
-            put issues here
+          <div class="col h-100 border rounded-2 border-dark-subtle">
+            <?php
+            assert(isset($issues) & is_array($issues), 'profiles must be an array');
+            $count = count($issues);
+            if ($count === 0) {
+              echo <<<HTML
+                <div class="text-center text-white m-6">
+                  <h3>No issues found</h3>
+                </div>
+              HTML;
+            } else {
+              assert($count > 0, 'There must be at least one profile to display');
+              $i = -1;
+              foreach ($issues as $issue) {
+                $i++;
+                $date_created = date_create($issue->date_created);
+                $date_created = date_format($date_created, 'H:i M d, Y');
+                $date_updated = date_create($issue->date_updated);
+                $date_updated = date_format($date_updated, 'H:i M d, Y');
+                $content = <<<HTML
+                  <div class="pt-1 pb-2">
+                    <a class="link-deco-hover fs-3 m-0" href="#">{$issue->title}</a>
+                    <div class="text-dark-light fs-5">{$issue->description}</div>
+                    <div class="text-dark-light">
+                      <i class="fa-solid fa-user-pen text-dark-light"></i>  {$issue->issuer}
+                      <i class="fa-solid fa-user-tag text-dark-light ms-3"></i>  {$issue->assignee}
+                      <br>
+                      <i class="fa-solid fa-clock text-dark-light"></i> Created: {$date_created}
+                      <br>
+                      <i class="fa-regular fa-clock text-dark-light"></i> Updated: {$date_updated}
+                    </div>
+                  </div>
+                HTML;
+
+                $border = $i < $count - 1 ? 'border-bottom border-dark-subtle' : '';
+                echo <<<HTML
+                  <div class="$border">
+                    {$content}
+                  </div>
+                HTML;
+              }
+            }
+            ?>
           </div>
         </div>
       <?php } else if ($view_members) { ?>
         <?php if ($is_viewer_owner) { ?>
             <form action="/public/projects/<?= $project_id ?>/add-member" method="post" class="row mt-3">
               <div class="col">
-                <input type="text" name="add_email" class="form-control form-input h-100 bg-dark-light" placeholder="Enter email">
+                <input type="text" name="add_email" class="form-control form-input h-100 bg-dark-light"
+                  placeholder="Enter email">
               </div>
               <div class="col-auto">
                 <select class="form-select bg-dark-light text-white h-100" name="new_member_role">
@@ -107,7 +149,7 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
             ?>
           </div>
       <?php } else if ($view_settings) { ?>
-        
+
       <?php } ?>
     </div>
   </body>

@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\ProjectModel;
 use App\Helpers\Helper;
+use App\Models\IssueModel;
 
 class ProjectController extends BaseController {
   public function index(): string {
@@ -76,7 +77,10 @@ class ProjectController extends BaseController {
       'project_id' => $project_id,
       'project' => ProjectModel::get_project($project_id),
     ];
-
+    
+    if (!$tab) {
+      $data['issues'] = IssueModel::get_issues($project_id);
+    }
     if ($tab === 'members') {
       $data['members'] = ProjectModel::get_members($project_id);
     }

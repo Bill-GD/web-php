@@ -88,7 +88,7 @@ class ProjectModel {
     if ($user_id == null) {
       return [];
     }
-    
+
     $res = DatabaseManager::instance()->query(
       "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner_name, p.owner, COUNT(i.issue_id) as issue_count
       FROM project as p
@@ -157,7 +157,7 @@ class ProjectModel {
     )->fetch();
 
     if (!$res) {
-      ProjectRole::find_by_name($role);
+      ProjectRole::from($role);
 
       DatabaseManager::instance()->query(
         "INSERT INTO project_role (project_id, user_id, user_role) VALUES (:project_id, :user_id, :role)",
@@ -183,7 +183,7 @@ class ProjectModel {
         'avatar_url' => $member['avatar_url'],
         'username' => $member['username'],
         'email' => $member['email'],
-        'user_role' => ProjectRole::find_by_name($member['user_role']),
+        'user_role' => ProjectRole::from($member['user_role']),
       ];
     }
     return $members;
