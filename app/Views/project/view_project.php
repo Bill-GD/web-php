@@ -147,11 +147,21 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                 $i++;
                 $role = ucfirst($member['user_role']->name);
                 $border = $i < $count - 1 ? 'border-bottom border-dark-subtle' : '';
+                $del_member = $member["user_id"] != $project->owner_id && $is_viewer_owner
+                  ? <<<HTML
+                      <a href="remove-member/{$member['user_id']}" class="text-decoration-none me-3">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                      </a>
+                    HTML
+                  : '';
                 $content = <<<HTML
                   <div class="px-4 py-3 d-flex align-items-center $border">
                     <span class="fs-4 me-3">{$member['username']}</span>
                     <span class="text-dark-light fs-6">{$member['email']}</span>
-                    <span class="text-dark-light ms-auto"><i class="fa-solid fa-user"></i> {$role}</span>
+                    <span class="text-dark-light ms-auto">
+                      $del_member
+                      <i class="fa-solid fa-user"></i> {$role}
+                    </span>
                   </div>
                 HTML;
                 echo $content;

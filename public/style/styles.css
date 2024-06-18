@@ -24,9 +24,6 @@
 .nav-link.active {
   font-weight: bold;
 }
-.link-no-deco {
-  text-decoration: none;
-}
 .link-deco-hover {
   text-decoration: none;
 }

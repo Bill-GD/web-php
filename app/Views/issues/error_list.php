@@ -21,11 +21,11 @@
       <?= App\Helpers\PageComponent::table_with_header(
         'mt-3',
         '<div class="flex-auto justify-content-evenly">
-          <a href="#" class="text-white link-no-deco">
+          <a href="#" class="text-white text-decoration-none">
             ' . App\Helpers\PageComponent::open_issue_svg(16) . '
             0 Open
           </a>
-          <a href="#" class="text-white link-no-deco">
+          <a href="#" class="text-white text-decoration-none">
             ' . App\Helpers\PageComponent::closed_issue_svg(16) . '
             1 Closed
           </a>

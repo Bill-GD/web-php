@@ -105,6 +105,15 @@ class ProjectController extends BaseController {
     Helper::redirect_to("/projects/{$project_id}/members");
   }
 
+  public function remove_member(string $project_id, string $user_id) {
+    if (Helper::is_admin()) {
+      Helper::redirect_to("/projects/{$project_id}/members?error_message=" . urlencode('Admins cannot remove members'));
+    }
+
+    ProjectModel::remove_member($project_id, $user_id);
+    Helper::redirect_to("/projects/{$project_id}/members");
+  }
+
   public function delete_project(string $project_id): void {
     if (Helper::is_admin()) {
       Helper::redirect_to("/projects/{$project_id}?error_message=" . urlencode('Admins cannot delete project'));

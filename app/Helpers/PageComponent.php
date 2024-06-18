@@ -133,7 +133,7 @@ class PageComponent {
     $dropdown_items = implode(array_map(fn($item) => '<li>' . $item . '</li>', $items));
     return <<<HTML
       <div class="dropdown $extra_dropdown_classes">
-        <a class="dropdown-toggle link-no-deco $extra_title_classes" data-bs-toggle="dropdown" role="button">
+        <a class="dropdown-toggle text-decoration-none $extra_title_classes" data-bs-toggle="dropdown" role="button">
           $title
         </a>
         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end border border-dark-light rounded-1">

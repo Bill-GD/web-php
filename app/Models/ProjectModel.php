@@ -9,6 +9,7 @@ class ProjectModel {
   public string $project_name;
   public string $description;
   public string $date_created;
+  public int $owner_id;
   public string $owner;
   public int $issue_count;
 
@@ -18,6 +19,7 @@ class ProjectModel {
     string $project_name,
     string $description,
     string $date_created,
+    ?int $owner_id = null,
     string $owner,
     int $issue_count,
   ) {
@@ -25,6 +27,7 @@ class ProjectModel {
     $this->project_name = $project_name;
     $this->description = $description;
     $this->date_created = $date_created;
+    $this->owner_id = $owner_id;
     $this->owner = $owner;
     $this->issue_count = $issue_count;
   }
@@ -73,12 +76,12 @@ class ProjectModel {
     $projects = [];
     foreach ($res as $project) {
       $projects[] = new ProjectModel(
-        $project['project_id'],
-        $project['project_name'],
-        $project['description'],
-        $project['date_created'],
-        $project['owner'],
-        $project['issue_count'],
+        project_id: $project['project_id'],
+        project_name: $project['project_name'],
+        description: $project['description'],
+        date_created: $project['date_created'],
+        owner: $project['owner'],
+        issue_count: $project['issue_count'],
       );
     }
     return $projects;
@@ -106,12 +109,12 @@ class ProjectModel {
         continue;
       }
       $projects[] = new ProjectModel(
-        $project['project_id'],
-        $project['project_name'],
-        $project['description'],
-        $project['date_created'],
-        $project['owner_name'],
-        $project['issue_count'],
+        project_id: $project['project_id'],
+        project_name: $project['project_name'],
+        description: $project['description'],
+        date_created: $project['date_created'],
+        owner: $project['owner_name'],
+        issue_count: $project['issue_count'],
       );
     }
     return $projects;
@@ -119,7 +122,7 @@ class ProjectModel {
 
   static function get_project(int $project_id): ProjectModel {
     $res = DatabaseManager::instance()->query(
-      "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner, COUNT(i.issue_id) as issue_count
+      "SELECT p.project_id, p.project_name, p.`description`, p.date_created, p.owner as owner_id, u.username as owner, COUNT(i.issue_id) as issue_count
       FROM project as p
       JOIN user as u ON p.owner = u.user_id
       LEFT JOIN issue as i ON p.project_id = i.project_id
@@ -136,6 +139,7 @@ class ProjectModel {
       $res['project_name'],
       $res['description'],
       $res['date_created'],
+      $res['owner_id'],
       $res['owner'],
       $res['issue_count'],
     );
@@ -168,9 +172,16 @@ class ProjectModel {
     throw new \Exception('User is already a member');
   }
 
+  static function remove_member(int $project_id, int $user_id): void {
+    DatabaseManager::instance()->query(
+      "DELETE FROM project_role WHERE project_id = :project_id AND user_id = :user_id",
+      ['project_id' => $project_id, 'user_id' => $user_id]
+    );
+  }
+
   static function get_members(int $project_id) {
     $res = DatabaseManager::instance()->query(
-      "SELECT u.avatar_url, u.username, u.email, r.user_role
+      "SELECT u.user_id, u.avatar_url, u.username, u.email, r.user_role
       FROM project_role as r
       JOIN user as u ON r.user_id = u.user_id
       WHERE r.project_id = :project_id",
@@ -180,6 +191,7 @@ class ProjectModel {
     $members = [];
     foreach ($res as $member) {
       $members[] = [
+        'user_id' => $member['user_id'],
         'avatar_url' => $member['avatar_url'],
         'username' => $member['username'],
         'email' => $member['email'],
