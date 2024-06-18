@@ -10,8 +10,8 @@ class IssueModel {
   public int $issue_id;
   public string $title;
   public string $description;
-  public IssueStatus $status; // 'error', 'canceled', 'pending', 'tested', 'closed'
-  public IssuePriority $priority; // 'high', 'mid', 'low'
+  public IssueStatus $status;
+  public IssuePriority $priority;
   public string $assignee;
   public string $issuer;
   public string $date_created;

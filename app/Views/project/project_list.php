@@ -24,7 +24,7 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
           <a href="/public/projects/joined" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
             role="button">Joined</a>
         </div>
-        <form action="/public/projects" method="get" class="w-100 me-2">
+        <form method="get" class="w-100 me-2">
           <input type="text" name="p" class="form-control form-input h-100 bg-dark-light"
             value="<?= isset($_GET['p']) ? $_GET['p'] : '' ?>" placeholder="Search project">
         </form>

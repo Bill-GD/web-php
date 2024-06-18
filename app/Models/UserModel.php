@@ -10,6 +10,7 @@ class UserModel {
   public int $user_id;
   public string $email;
   public string $username;
+  public string $avatar_url;
   public bool $is_admin;
   public string $date_created;
 
@@ -155,7 +156,7 @@ class UserModel {
   }
 
   static function get_all_users(): array {
-    $q_str = "SELECT user_id, email, username, is_admin, date_created FROM `user`";
+    $q_str = "SELECT user_id, email, username, avatar_url, is_admin, date_created FROM `user`";
     $res = DatabaseManager::instance()->query($q_str)->fetchAll(PDO::FETCH_ASSOC);
 
     $users = [];
@@ -164,6 +165,7 @@ class UserModel {
       $new_user->user_id = $user_data['user_id'];
       $new_user->email = $user_data['email'];
       $new_user->username = $user_data['username'];
+      $new_user->avatar_url = $user_data['avatar_url'];
       $new_user->is_admin = $user_data['is_admin'];
       $new_user->date_created = $user_data['date_created'];
       $users[] = $new_user;

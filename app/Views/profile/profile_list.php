@@ -29,13 +29,28 @@
             $date = date_create($profile->date_created);
             $date = date_format($date, 'H:i M d, Y');
             $acc_type = $profile->is_admin ? 'Admin' : 'User';
+            $user_pfp = $profile->avatar_url;
+
+            if (!str_contains($user_pfp, 'http')) {
+              assert(str_contains($user_pfp, 'assets'), 'User profile picture should be in assets folder, got ' . $user_pfp);
+              $user_pfp = App\Helpers\Helper::get_resource_path($user_pfp);
+            }
+
             $content = <<<HTML
-              <div class="pt-1 pb-2 text-center">
-                <p class="text-white fs-3 m-0">{$profile->username}</p>
-                <div class="text-dark-light fs-5">{$profile->email}</div>
-                <div class="text-dark-light">
-                  <i class="fa-solid fa-user text-dark-light"></i>  {$acc_type}
-                  <i class="fa-solid fa-clock text-dark-light ms-3"></i>  {$date}
+              <div class="pt-1 pb-2 row">
+                <div class="col-auto ms-4 align-self-center">
+                  <img class="rounded-5" src="$user_pfp" width=60, height=60>
+                </div>
+                <div class="col">
+                  <p class="text-white fs-2 m-0">
+                    {$profile->username}
+                  </p>
+                  <div class="text-dark-light fs-6 mb-1">{$profile->email}</div>
+                  <div class="text-dark-light">
+                    <i class="fa-solid fa-image-portrait"></i>  {$profile->user_id}
+                    <i class="fa-solid fa-user text-dark-light ms-3"></i>  {$acc_type}
+                    <i class="fa-solid fa-clock text-dark-light ms-3"></i>  {$date}
+                  </div>
                 </div>
               </div>
             HTML;
