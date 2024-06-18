@@ -197,4 +197,11 @@ class ProjectModel {
 
     return $res['user_role'] === ProjectRole::owner->name;
   }
+
+  static function delete_project(int $project_id): void {
+    DatabaseManager::instance()->query(
+      "call delete_project(:project_id)",
+      ['project_id' => $project_id]
+    );
+  }
 }

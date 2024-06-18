@@ -104,4 +104,13 @@ class ProjectController extends BaseController {
     }
     Helper::redirect_to("/projects/{$project_id}/members");
   }
+
+  public function delete_project(string $project_id): void {
+    if (Helper::is_admin()) {
+      Helper::redirect_to("/projects/{$project_id}?error_message=" . urlencode('Admins cannot delete project'));
+    }
+
+    ProjectModel::delete_project($project_id);
+    Helper::redirect_to('/projects');
+  }
 }

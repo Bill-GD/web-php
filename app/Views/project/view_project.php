@@ -160,7 +160,37 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
             ?>
           </div>
       <?php } else if ($view_settings) { ?>
-
+        <?php if ($is_viewer_owner) { ?>
+              <div class="d-flex flex-row justify-content-around align-items-center">
+                <!-- <span class="fs-5">
+                Delete project
+              </span> -->
+                <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm-delete-modal"
+                  role="button">Delete
+                  project</a>
+              </div>
+              <div class="modal" id="confirm-delete-modal" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content bg-dark-light border border-dark-subtle">
+                    <div class="modal-header border-0">
+                      <i class="fa-solid fa-exclamation-triangle text-danger fs-4 me-4"></i>
+                      <h1 class="modal-title fs-4 text-danger" id="exampleModalLabel">Modal title</h1>
+                      <!-- <button type="button" class="btn-close"></button> -->
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to delete project
+                      <span class="text-primary"><?= $project->project_name ?></span>?
+                      <br>
+                      This is irreversible and all data will be lost.
+                    </div>
+                    <div class="modal-footer border-0">
+                      <a role="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+                      <a href="delete" role="button" class="btn btn-danger">Delete</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        <?php } ?>
       <?php } ?>
     </div>
   </body>

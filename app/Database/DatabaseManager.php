@@ -73,7 +73,7 @@ class DatabaseManager {
    */
   // * needs improvement: check for named param, if no, force param binds to be empty
   function query(string $query_string, array $params = []): PDOStatement {
-    if (!$this->starts_with($query_string, ['SELECT', 'INSERT', 'UPDATE', 'DELETE'])) {
+    if (!$this->starts_with($query_string, ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CALL'], false)) {
       throw new \Exception("Invalid query string, must start with SELECT, INSERT, UPDATE or DELETE");
     }
     // filter all token starts with `:`
@@ -95,7 +95,11 @@ class DatabaseManager {
     return $stmt;
   }
 
-  private function starts_with(string $str, array $search_strings): bool {
+  private function starts_with(string $str, array $search_strings, bool $case_sensitive = true): bool {
+    if (!$case_sensitive) {
+      $str = strtolower($str);
+      $search_strings = array_map(fn($s) => strtolower($s), $search_strings);
+    }
     foreach ($search_strings as $search_string) {
       if (str_starts_with($str, $search_string)) {
         return true;

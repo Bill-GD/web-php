@@ -27,8 +27,8 @@ $routes->get('projects/(:num)/(members|settings)', 'ProjectController::view_proj
 $routes->post('projects/(:num)/add-member', 'ProjectController::add_member/$1');
 $routes->get('create-project', 'ProjectController::create');
 $routes->post('create-new-project', 'ProjectController::create_project');
+$routes->get('projects/(:num)/delete', 'ProjectController::delete_project/$1');
 
-// $routes->get('error-list', 'ErrorList::index');
 $routes->get('issues', 'ErrorList::index');
 $routes->get('create-issue', 'ErrorList::create');
 $routes->post('create', 'CreateError::create');
