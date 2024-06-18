@@ -29,8 +29,8 @@
             $date = date_create($profile->date_created);
             $date = date_format($date, 'H:i M d, Y');
             $acc_type = $profile->is_admin ? 'Admin' : 'User';
+            $gh = $profile->is_github_auth_user ? '<i class="fa-brands fa-github fs-4 ms-1 text-dark-light"></i>' : '';
             $user_pfp = $profile->avatar_url;
-
             if (!str_contains($user_pfp, 'http')) {
               assert(str_contains($user_pfp, 'assets'), 'User profile picture should be in assets folder, got ' . $user_pfp);
               $user_pfp = App\Helpers\Helper::get_resource_path($user_pfp);
@@ -43,7 +43,7 @@
                 </div>
                 <div class="col">
                   <p class="text-white fs-2 m-0">
-                    {$profile->username}
+                    {$profile->username} {$gh}
                   </p>
                   <div class="text-dark-light fs-6 mb-1">{$profile->email}</div>
                   <div class="text-dark-light">

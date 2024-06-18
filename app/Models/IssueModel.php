@@ -3,7 +3,6 @@ namespace App\Models;
 
 use App\Database\DatabaseManager;
 use PDO;
-use DateTime;
 
 class IssueModel {
   public int $project_id;

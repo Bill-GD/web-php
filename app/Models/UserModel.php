@@ -13,6 +13,7 @@ class UserModel {
   public string $avatar_url;
   public bool $is_admin;
   public string $date_created;
+  public bool $is_github_auth_user;
 
   function login(string $email, string $password): void {
     if (empty($email)) {
@@ -156,7 +157,9 @@ class UserModel {
   }
 
   static function get_all_users(): array {
-    $q_str = "SELECT user_id, email, username, avatar_url, is_admin, date_created FROM `user`";
+    $q_str = "SELECT user_id, email, username, avatar_url, is_admin, date_created,
+              CASE WHEN github_access_token IS NULL THEN 0 ELSE 1 END AS has_github_access_token
+              FROM `user`";
     $res = DatabaseManager::instance()->query($q_str)->fetchAll(PDO::FETCH_ASSOC);
 
     $users = [];
@@ -168,6 +171,7 @@ class UserModel {
       $new_user->avatar_url = $user_data['avatar_url'];
       $new_user->is_admin = $user_data['is_admin'];
       $new_user->date_created = $user_data['date_created'];
+      $new_user->is_github_auth_user = $user_data['has_github_access_token'];
       $users[] = $new_user;
     }
 
