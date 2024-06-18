@@ -8,7 +8,6 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
     <meta charset="UTF-8">
     <title><?= $title ?></title>
     <?= App\Helpers\PageComponent::import_styles() ?>
-    <link rel="stylesheet" href="<?= App\Helpers\Helper::get_resource_path('public/style/error_style.css') ?>">
   </head>
   <body class="bg-dark-subtle">
     <?= App\Helpers\PageComponent::page_header() ?>
@@ -54,7 +53,7 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
             $content = <<<HTML
               <div class="pt-3 pb-4 row">
                 <div class="col mx-4">
-                  <a class="link-deco-hover fs-3" href="/public/projects/$project->project_id">{$project->project_name}</a>
+                  <a class="link-deco-hover fs-2" href="/public/projects/$project->project_id">{$project->project_name}</a>
                   <div class="text-dark-light fs-5 flex-wrap">{$project->description}</div>
                   <div class="text-dark-light">
                     <i class="fa-solid fa-user text-dark-light"></i>  {$project->owner}

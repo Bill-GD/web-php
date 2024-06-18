@@ -76,10 +76,14 @@ class PageComponent {
       // title => [href, enabled, is_active]
       'Projects' => ['/public/projects', true, str_contains($access_uri, 'projects')],
       'Issues' => ['/public/issues', true, str_contains($access_uri, 'issues')],
+      'Profiles' => ['/public/profiles', Helper::is_admin(), str_contains($access_uri, 'profiles')],
     ];
 
     $nav_links = '';
     foreach ($links as $text => $val) {
+      if (!$val[1]) {
+        continue;
+      }
       $nav_links .= '<li class="nav-item">
         <a class="nav-link' . (!$val[1] ? ' disabled' : '') . ($val[2] ? ' active' : ' text-white') . '" href="' . $val[0] . '">' . $text . '</a>
       </li>';

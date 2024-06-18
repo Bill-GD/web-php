@@ -145,7 +145,7 @@ class ProjectModel {
     if (empty($email)) {
       throw new \Exception('Email is required');
     }
-    $user_info = UserModel::find_user($email);
+    $user_info = UserModel::find_user(email: $email);
     if (!$user_info) {
       throw new \Exception('User not found');
     }

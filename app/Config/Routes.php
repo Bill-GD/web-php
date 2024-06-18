@@ -17,6 +17,9 @@ $routes->get('login', 'Login::basic_login');
 $routes->post('login-validate', 'Login::login_validate');
 $routes->get('logout', 'Logout::index');
 
+$routes->get('profiles', 'Profile::index');
+$routes->get('profiles/(:num)', 'Profile::view_profile/$1');
+
 $routes->get('projects', 'ProjectController::index');
 $routes->get('projects/(joined|created)', 'ProjectController::filter/$1');
 $routes->get('projects/(:num)', 'ProjectController::view_project/$1');

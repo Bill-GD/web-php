@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Database\DatabaseManager;
 use App\Helpers\Helper;
+use DateTime;
 use PDO;
 
 class UserModel {
@@ -10,9 +11,9 @@ class UserModel {
   public string $email;
   public string $username;
   public bool $is_admin;
+  public string $date_created;
 
-  function login(string $email, string $password): void
-  {
+  function login(string $email, string $password): void {
     if (empty($email)) {
       throw new \Exception('Email is required');
     }
@@ -109,8 +110,7 @@ class UserModel {
     DatabaseManager::instance()->query($q_str);
   }
 
-  static private function encode_gh_token(string $token): string
-  {
+  static private function encode_gh_token(string $token): string {
     return implode(
       array_map(fn(string $char): string => dechex(ord($char)), str_split($token))
     );
@@ -123,19 +123,20 @@ class UserModel {
     );
   }
 
-  static function find_user(?string $email = null, ?string $username = null): ?UserModel {
-    if (empty($email) && empty($username)) {
-      throw new \Exception('Email or username is required');
+  static function find_user(?int $user_id = null, ?string $email = null, ?string $username = null): ?UserModel {
+    if (empty($user_id) && empty($email) && empty($username)) {
+      throw new \Exception('User ID, email or username is required');
     }
     $q_str = "SELECT * FROM user WHERE ";
-    $q_str .= $email === null ? '' : "email = :email";
-    $q_str .= $email !== null && $username !== null ? ' AND ' : '';
-    $q_str .= $username === null ? '' : "username = :username";
+    // make a query that allow any combination of the 3 params, remember to add 'AND' between 2 params
+    $q_str .= $user_id ? "user_id = :user_id" : "";
+    $q_str .= $email ? ($user_id ? " AND email = :email" : "email = :email") : "";
+    $q_str .= $username ? (($user_id || $email) ? " AND username = :username" : "username = :username") : "";
 
     $res = DatabaseManager::instance()->query(
       $q_str,
       array_filter(
-        ['email' => $email, 'username' => $username],
+        ['user_id' => $user_id, 'email' => $email, 'username' => $username],
         fn($e) => $e !== null,
       ),
     )->fetch(PDO::FETCH_ASSOC);
@@ -153,9 +154,8 @@ class UserModel {
     return $new_user;
   }
 
-  static function getAllUsers(): array
-  {
-    $q_str = "SELECT * FROM `user`";
+  static function get_all_users(): array {
+    $q_str = "SELECT user_id, email, username, is_admin, date_created FROM `user`";
     $res = DatabaseManager::instance()->query($q_str)->fetchAll(PDO::FETCH_ASSOC);
 
     $users = [];
@@ -165,6 +165,7 @@ class UserModel {
       $new_user->email = $user_data['email'];
       $new_user->username = $user_data['username'];
       $new_user->is_admin = $user_data['is_admin'];
+      $new_user->date_created = $user_data['date_created'];
       $users[] = $new_user;
     }
 
