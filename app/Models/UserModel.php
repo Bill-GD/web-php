@@ -130,7 +130,6 @@ class UserModel {
       throw new \Exception('User ID, email or username is required');
     }
     $q_str = "SELECT * FROM user WHERE ";
-    // make a query that allow any combination of the 3 params, remember to add 'AND' between 2 params
     $q_str .= $user_id ? "user_id = :user_id" : "";
     $q_str .= $email ? ($user_id ? " AND email = :email" : "email = :email") : "";
     $q_str .= $username ? (($user_id || $email) ? " AND username = :username" : "username = :username") : "";
