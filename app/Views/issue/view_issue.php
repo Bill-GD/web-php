@@ -31,15 +31,15 @@ use App\Models\IssuePriority;
     ) ?>
     <div class="container text-white mt-5">
       <div class="border-bottom border-dark-subtle pb-4">
-        <h3><?= $project->project_name ?></h3>
+        <h3><?= $issue->title ?></h3>
         <div class="d-flex">
           <div class="d-flex justify-content-around me-3 align-items-center">
             <span class="badge <?= Helper::get_status_badge_color($issue->status) ?> me-2"><?= ucfirst($issue->status->name) ?></span>
             <span class="badge <?= Helper::get_priority_badge_color($issue->priority) ?>"><?= ucfirst($issue->priority->name) ?></span>
           </div>
           <span class="text-dark-light">
-            <?= $project->owner ?> opened this issue on
-            <?= date_format(date_create($project->date_created), 'M d, Y') ?>
+            <?= $issue->issuer_name ?> opened this issue on
+            <?= date_format(date_create($issue->date_created), 'M d, Y') ?>
           </span>
         </div>
       </div>
@@ -50,7 +50,7 @@ use App\Models\IssuePriority;
               Description
             </div>
             <div class="px-4 py-3">
-              <?= $project->description ?>
+              <?= $issue->description ?>
             </div>
           </div>
         </div>

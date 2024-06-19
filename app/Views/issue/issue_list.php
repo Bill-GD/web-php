@@ -2,7 +2,7 @@
 use App\Helpers\Helper;
 
 $title = 'Issues';
-$title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : ' - All');
+$title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,8 +50,8 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           $issue_status = $issue->status;
           $issue_created_at = date_format(date_create($issue->date_created), 'H:i M d, Y');
           $issue_updated_at = date_format(date_create($issue->date_updated), 'H:i M d, Y');
-          $issue_creator = $issue->issuer;
-          $issue_assignee = $issue->assignee ? "assigned to {$issue->assignee}" : 'unassigned';
+          $issue_creator = $issue->issuer_name;
+          $issue_assignee = $issue->assignee ? "assigned to {$issue->assignee_name}" : 'unassigned';
 
           $issue_status_color = Helper::get_status_badge_color($issue_status);
           $issue_priority_color = Helper::get_priority_badge_color($issue_priority);
