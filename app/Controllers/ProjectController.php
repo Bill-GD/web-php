@@ -79,7 +79,7 @@ class ProjectController extends BaseController {
     if (!$tab) {
       $data['issues'] = IssueModel::get_issues($project_id);
       if (isset($_GET['i'])) {
-        $data['issues'] = array_filter($data['issues'], fn($issue) => str_contains(strtolower($issue->issue_title), strtolower($_GET['i'])));
+        $data['issues'] = array_filter($data['issues'], fn($issue) => str_contains(strtolower($issue->title), strtolower($_GET['i'])));
       }
     }
     if ($tab === 'members') {

@@ -30,8 +30,6 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           <input type="text" name="i" class="form-control form-input h-100 bg-dark-light"
             value="<?= isset($_GET['i']) ? $_GET['i'] : '' ?>" placeholder="Search issue">
         </form>
-        <!-- <a <?= \App\Helpers\Helper::is_admin() ? '' : 'href="/public/create-issue"' ?> role="button"
-          class="btn btn-success col-2 ms-2 <?= \App\Helpers\Helper::is_admin() ? 'disabled' : '' ?>"> New issue </a> -->
       </div>
       <?php
       $issue_list = '';
@@ -59,7 +57,7 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           $i++;
           $b = $i < count($issues) - 1 ? 'border-bottom border-dark-subtle' : '';
 
-          $issue_list = <<<HTML
+          $issue_list .= <<<HTML
             <div class="$b px-4 py-2">
               <div class="d-flex">
                 <div class="d-flex flex-column justify-content-around me-3">
@@ -77,9 +75,8 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           HTML;
         }
       }
-      ?>
 
-      <?= App\Helpers\PageComponent::table_with_header(
+      echo App\Helpers\PageComponent::table_with_header(
         'mt-3',
         '<div class="d-flex justify-content-end">
           <div class="flex-auto">
@@ -117,7 +114,7 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           'text-white'
         ) . '</div>',
         $issue_list
-      ) ?>
+      ); ?>
     </div>
   </body>
 </html>

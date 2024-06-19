@@ -83,14 +83,14 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                   $date_updated = date_create($issue->date_updated);
                   $date_updated = date_format($date_updated, 'H:i M d, Y');
 
-                  $assignee = $issue->assignee ? $issue->assignee : 'Unassigned';
+                  $assignee = $issue->assignee ? $issue->assignee_name : 'Unassigned';
 
                   $content = <<<HTML
                     <div class="pt-1 pb-2 ps-4">
                       <a class="link-deco-hover fs-3" href="/public/projects/$project_id/issues/$issue->issue_id">{$issue->title}</a>
                       <div class="text-dark-light fs-5">{$issue->description}</div>
                       <div class="text-dark-light">
-                        <i class="fa-solid fa-user-pen text-dark-light"></i>  {$issue->issuer}
+                        <i class="fa-solid fa-user-pen text-dark-light"></i>  {$issue->issuer_name}
                         <i class="fa-solid fa-user-tag text-dark-light ms-3"></i>  $assignee
                         <br>
                         <i class="fa-solid fa-clock text-dark-light"></i> Created: {$date_created}

@@ -7,7 +7,7 @@ use App\Models\IssuePriority;
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title><?= $project->project_name ?> | <?= $project->owner ?></title>
+    <title><?= $issue->title ?> | <?= $project->owner ?>/<?= $project->project_name ?></title>
     <?= App\Helpers\PageComponent::import_styles() ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
   </head>

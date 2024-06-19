@@ -35,9 +35,9 @@ class Helper {
   static function get_status_badge_color(IssueStatus $status): string {
     return match ($status) {
       IssueStatus::open => 'bg-success',
-      IssueStatus::cancelled => 'text-bg-info',
-      IssueStatus::pending => 'text-bg-warning',
-      IssueStatus::tested => 'text-bg-primary',
+      IssueStatus::cancelled => 'bg-info',
+      IssueStatus::pending => 'bg-warning',
+      IssueStatus::tested => 'bg-primary',
       IssueStatus::closed => 'bg-purple',
     };
   }

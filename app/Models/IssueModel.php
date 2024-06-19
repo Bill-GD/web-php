@@ -42,7 +42,7 @@ class IssueModel {
       throw new \Exception('Title and description are required');
     }
     if (strlen($title) > 100) {
-      throw new \Exception('Title must be less than 50 characters');
+      throw new \Exception('Title must be less than 100 characters');
     }
     if (empty($issuer)) {
       throw new \Exception('Issuer is required');
