@@ -19,33 +19,43 @@ class IssueController extends BaseController {
     }
 
     $data['issue_count'] = IssueModel::issue_type_count();
-    // $user_id = $is_admin ? null : $_COOKIE['user_id'];
+    $i = [];
 
-    $i = IssueModel::get_all_issues();
-    // array_push($p, ...ProjectModel::get_joined_projects($user_id));
-    // // $p = array_unique($p, SORT_REGULAR); // filter duplicated project_id
+    if (isset($_GET['t'])) {
+      $i = IssueModel::get_all_issues($_GET['t'] === 'newest');
+    } else {
+      $i = IssueModel::get_all_issues();
 
-    if (isset($_GET['i'])) {
-      $i = array_filter($i, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['i'])));
+      if (isset($_GET['i'])) {
+        $i = array_filter($i, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['i'])));
+      }
     }
 
-    // $data['projects'] = $p;
+    $data['issues'] = $i;
     return view('issue/issue_list', $data);
   }
 
   public function filter(string $filter): string {
-    // filter created (issuer) and assigned (assignee)
     $is_logged_in = Helper::is_logged_in();
     $data = ['is_logged_in' => $is_logged_in];
 
     if (!$is_logged_in) {
       Helper::redirect_to('/');
     }
+    $params = [
+      $_COOKIE['user_id'],
+      !isset($_GET['t']) ? null : ($_GET['t'] === 'newest' ? true : false)
+    ];
 
     $data['issue_count'] = IssueModel::issue_type_count();
-    $data['issues'] = $filter === 'created' ? IssueModel::get_created_issues($_COOKIE['user_id']) : IssueModel::get_assigned_issues($_COOKIE['user_id']);
+    $i = $filter === 'created' ? IssueModel::get_created_issues(...$params) : IssueModel::get_assigned_issues(...$params);
+
+    if (isset($_GET['i'])) {
+      $i = array_filter($i, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['i'])));
+    }
 
     $data['filter'] = ' - ' . ucfirst($filter);
+    $data['issues'] = $i;
 
     return view('issue/issue_list', $data);
   }
@@ -66,6 +76,6 @@ class IssueController extends BaseController {
   }
 
   public function create(): string {
-    return view('issue/create_error');
+    return view('issue/create_issue');
   }
 }

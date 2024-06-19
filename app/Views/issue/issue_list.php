@@ -28,8 +28,8 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
           <input type="text" name="i" class="form-control form-input h-100 bg-dark-light"
             value="<?= isset($_GET['i']) ? $_GET['i'] : '' ?>" placeholder="Search issue">
         </form>
-        <a <?= \App\Helpers\Helper::is_admin() ? '' : 'href="/public/create-project"' ?> role="button"
-          class="btn btn-success col-2 <?= \App\Helpers\Helper::is_admin() ? 'disabled' : '' ?>"> New project </a>
+        <a <?= \App\Helpers\Helper::is_admin() ? '' : 'href="/public/create-issue"' ?> role="button"
+          class="btn btn-success col-2 <?= \App\Helpers\Helper::is_admin() ? 'disabled' : '' ?>"> New issue </a>
       </div>
 
       <?= App\Helpers\PageComponent::table_with_header(
@@ -53,75 +53,16 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? $filter : ' - All'
             </a>
           </div>' .
         App\Helpers\PageComponent::dropdown(
-          'Author',
-          '<h6 class="dropdown-header">Filter by author</h6>',
-          // get project members from database
-          [
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check"></i>
-              <img src="https://avatars.githubusercontent.com/u/96820104?s=40" width="20" height="20" />
-              duongducbinh
-            </a>'
-          ],
-          'mx-3',
-          'text-white'
-        ) .
-        App\Helpers\PageComponent::dropdown(
-          'Project',
-          '<h6 class="dropdown-header">Filter by project</h6>',
-          [
-            '<span class="d-flex justify-content-center">No project</span>'
-          ],
-          'mx-3',
-          'text-white'
-        ) .
-        App\Helpers\PageComponent::dropdown(
-          'Priority',
-          '<h6 class="dropdown-header">Filter by priority</h6>',
-          // get project members from database
-          [
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check invisible"></i>
-              High
-            </a>',
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check"></i>
-              Mid
-            </a>',
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check invisible"></i>
-              Low
-            </a>'
-          ],
-          'mx-3',
-          'text-white'
-        ) .
-        App\Helpers\PageComponent::dropdown(
-          'Assignee',
-          '<h6 class="dropdown-header">Filter by who’s assigned</h6>',
-          // get project members from database
-          [
-            '<a class="dropdown-item" href="#">Assigned to nobody</a>',
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check"></i>
-              <img src="https://avatars.githubusercontent.com/u/96820104?s=40" width="20" height="20" />
-              duongducbinh
-            </a>'
-          ],
-          'mx-3',
-          'text-white'
-        ) .
-        App\Helpers\PageComponent::dropdown(
           'Sort',
           '<h6 class="dropdown-header">Sort by</h6>',
           [
             // put class invisible if not selected
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check invisible"></i>
+            '<a class="dropdown-item" href="?t=newest">
+              <i class="fa-solid fa-check'. (str_contains($_SERVER['REQUEST_URI'], 'newest') ? '' : ' invisible') .'"></i>
               Newest
             </a>',
-            '<a class="dropdown-item" href="#">
-              <i class="fa-solid fa-check"></i>
+            '<a class="dropdown-item" href="?t=oldest">
+              <i class="fa-solid fa-check' . (str_contains($_SERVER['REQUEST_URI'], 'oldest') ? '' : ' invisible') . '"></i>
               Oldest
             </a>'
           ],

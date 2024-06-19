@@ -120,8 +120,12 @@ class IssueModel {
     );
   }
 
-  static function get_all_issues(): array {
-    $result = DatabaseManager::instance()->query("SELECT * FROM issue")->fetchAll();
+  static function get_all_issues(?bool $sort_newest = null): array {
+    $query = "SELECT * FROM issue";
+    if ($sort_newest != null) {
+      $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
+    }
+    $result = DatabaseManager::instance()->query($query)->fetchAll();
 
     $issues = [];
     foreach ($result as $issue) {
@@ -212,9 +216,13 @@ class IssueModel {
     return $issues;
   }
 
-  static function get_created_issues(int $user_id): array {
+  static function get_created_issues(int $user_id, ?bool $sort_newest = null): array {
+    $query = "SELECT * FROM issue WHERE issuer = :user_id";
+    if ($sort_newest != null) {
+      $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
+    }
     $result = DatabaseManager::instance()->query(
-      "SELECT * FROM issue WHERE issuer = :user_id",
+      $query,
       ['user_id' => $user_id]
     )->fetchAll();
 
@@ -237,9 +245,13 @@ class IssueModel {
     return $issues;
   }
 
-  static function get_assigned_issues(int $user_id): array {
+  static function get_assigned_issues(int $user_id, ?bool $sort_newest = null): array {
+    $query = "SELECT * FROM issue WHERE assignee = :user_id";
+    if ($sort_newest != null) {
+      $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
+    }
     $result = DatabaseManager::instance()->query(
-      "SELECT * FROM issue WHERE assignee = :user_id",
+      $query,
       ['user_id' => $user_id]
     )->fetchAll();
 
