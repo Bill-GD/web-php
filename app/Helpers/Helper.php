@@ -65,6 +65,18 @@ class Helper {
     }
   }
 
+  static function get_profile_picture_url(string $avatar_url): string {
+
+    $user_pfp = empty($avatar_url) ? 'public/assets/default_avatar.png' : $avatar_url;
+
+    if (!str_contains($user_pfp, 'http')) {
+      assert(str_contains($user_pfp, 'assets'), 'User profile picture should be in assets folder, got ' . $user_pfp);
+      $user_pfp = Helper::get_resource_path($user_pfp);
+    }
+    
+    return $user_pfp;
+  }
+
   static function get_github_auth_url(): string {
     if (empty(Globals::$github_client_id)) {
       Globals::init();

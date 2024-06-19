@@ -60,7 +60,8 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                 <input type="text" name="i" class="form-control form-input h-100 bg-dark-light"
                   value="<?= isset($_GET['i']) ? $_GET['i'] : '' ?>" placeholder="Search issue">
               </form>
-              <a href="/public/create-issue" role="button" class="btn btn-success col-auto"> New issue </a>
+              <a href="/public/projects/<?= $project_id ?>/create-issue" role="button" class="btn btn-success col-auto">
+                New issue </a>
             </div>
             <div class="border rounded-2 border-dark-subtle">
               <?php
@@ -82,15 +83,14 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                   $date_updated = date_create($issue->date_updated);
                   $date_updated = date_format($date_updated, 'H:i M d, Y');
                   $content = <<<HTML
-                    <div class="pt-1 pb-2">
-                      <a class="link-deco-hover fs-3 m-0" href="#">{$issue->title}</a>
+                    <div class="pt-1 pb-2 ps-4">
+                      <a class="link-deco-hover fs-3" href="/public/projects/{$project_id}/issues/$issue->issue_id">{$issue->title}</a>
                       <div class="text-dark-light fs-5">{$issue->description}</div>
                       <div class="text-dark-light">
                         <i class="fa-solid fa-user-pen text-dark-light"></i>  {$issue->issuer}
                         <i class="fa-solid fa-user-tag text-dark-light ms-3"></i>  {$issue->assignee}
                         <br>
                         <i class="fa-solid fa-clock text-dark-light"></i> Created: {$date_created}
-                        <br>
                         <i class="fa-regular fa-clock text-dark-light"></i> Updated: {$date_updated}
                       </div>
                     </div>
@@ -149,9 +149,30 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                 $border = $i < $count - 1 ? 'border-bottom border-dark-subtle' : '';
                 $del_member = $member["user_id"] != $project->owner_id && $is_viewer_owner
                   ? <<<HTML
-                      <a href="remove-member/{$member['user_id']}" class="text-decoration-none me-3">
+                      <a href="remove-member/{$member['user_id']}" class="text-decoration-none me-3" data-bs-toggle="modal" data-bs-target="#confirm-delete-user-modal">
                         <i class="fa-solid fa-trash text-danger"></i>
                       </a>
+                      <div class="modal fade" id="confirm-delete-user-modal" tabindex="-1">
+                        <div class="modal-dialog">
+                          <div class="modal-content bg-dark-light border border-dark-subtle">
+                            <div class="modal-header border-0">
+                              <i class="fa-solid fa-exclamation-triangle text-danger fs-4 me-4"></i>
+                              <h1 class="modal-title fs-4 text-danger" id="exampleModalLabel">Modal title</h1>
+                              <!-- <button type="button" class="btn-close"></button> -->
+                            </div>
+                            <div class="modal-body">
+                              Are you sure you want to remove user
+                              <span class="text-primary">{$member['username']}</span> from this project?
+                              <br>
+                              This is irreversible and all data will be lost.
+                            </div>
+                            <div class="modal-footer border-0">
+                              <a role="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+                              <a href="delete" role="button" class="btn btn-danger">Delete</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     HTML
                   : '';
                 $content = <<<HTML
@@ -175,11 +196,11 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                 <!-- <span class="fs-5">
                 Delete project
               </span> -->
-                <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm-delete-modal"
+                <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm-delete-project-modal"
                   role="button">Delete
                   project</a>
               </div>
-              <div class="modal" id="confirm-delete-modal" tabindex="-1">
+              <div class="modal fade" id="confirm-delete-project-modal" tabindex="-1">
                 <div class="modal-dialog">
                   <div class="modal-content bg-dark-light border border-dark-subtle">
                     <div class="modal-header border-0">

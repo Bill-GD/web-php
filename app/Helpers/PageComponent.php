@@ -1,6 +1,9 @@
 <?php
 namespace App\Helpers;
 
+use App\Models\IssuePriority;
+use App\Models\IssueStatus;
+
 class PageComponent {
   static function import_styles(): string {
     return '
@@ -34,18 +37,18 @@ class PageComponent {
           <path
             d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
         </svg>
-        <div class="col align-content-center">$error_message</div>
+        <div class="col align-content-center fs-6">$error_message</div>
       </div>
     HTML;
   }
-
+  
   static function table_with_header(string $table_classes = '', string $header, string $content): string {
     return <<<HTML
       <div class="border border-dark-subtle rounded-2 ' . $table_classes . '">
         <div class="bg-dark-light p-3 border-bottom rounded-top-2 border-dark-subtle">
           $header
         </div>
-        <div class="d-flex flex-column m-6 align-items-center justify-content-center">
+        <div class="d-flex flex-column">
           $content
         </div>
       </div>
@@ -94,12 +97,8 @@ class PageComponent {
   }
 
   static private function account_drop_down(): string {
-    $user_pfp = empty($_COOKIE['avatar_url']) ? 'public/assets/default_avatar.png' : $_COOKIE['avatar_url'];
+    $user_pfp = Helper::get_profile_picture_url($_COOKIE['avatar_url']);
 
-    if (!str_contains($user_pfp, 'http')) {
-      assert(str_contains($user_pfp, 'assets'), 'User profile picture should be in assets folder, got ' . $user_pfp);
-      $user_pfp = Helper::get_resource_path($user_pfp);
-    }
     return self::dropdown(
       '<img class="rounded-5" src="' . $user_pfp . '" width=30, height=30>',
       '',

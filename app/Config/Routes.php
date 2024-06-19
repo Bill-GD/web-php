@@ -30,8 +30,10 @@ $routes->get('create-project', 'ProjectController::create');
 $routes->post('create-new-project', 'ProjectController::create_project');
 $routes->get('projects/(:num)/delete', 'ProjectController::delete_project/$1');
 
+$routes->get('projects/(:num)/create-issue', 'IssueController::create/$1');
+$routes->post('projects/(:num)/create-new-issue', 'IssueController::create_issue/$1');
+$routes->get('projects/(:num)/issues/(:num)', 'IssueController::view_issue/$2');
+
 $routes->get('issues', 'IssueController::index');
 $routes->get('issues/(created|assigned)', 'IssueController::filter/$1');
 $routes->get('issues/(:num)', 'IssueController::view_issue/$1');
-$routes->get('create-issue', 'IssueController::create');
-$routes->post('create', 'IssueController::create');

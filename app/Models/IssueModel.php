@@ -12,12 +12,12 @@ class IssueModel {
   public string $description;
   public IssueStatus $status;
   public IssuePriority $priority;
-  public string $issuer;
-  public string $assignee;
+  public ?string $issuer;
+  public ?string $assignee;
   public string $date_created;
   public string $date_updated;
 
-  private function __construct(int $issue_id, int $project_id, string $title, string $description, IssueStatus $status, IssuePriority $priority, string $assignee, string $issuer, string $date_created, string $date_updated) {
+  private function __construct(int $issue_id, int $project_id, string $title, string $description, IssueStatus $status, IssuePriority $priority, ?string $assignee, string $issuer, string $date_created, string $date_updated) {
     $this->issue_id = $issue_id;
     $this->project_id = $project_id;
     $this->title = $title;
@@ -30,7 +30,7 @@ class IssueModel {
     $this->date_updated = $date_updated;
   }
 
-  static function create_issue(int $project_id, string $title, string $description, IssueStatus $status = IssueStatus::open, IssuePriority $priority = IssuePriority::low, int $issuer, ?int $assignee = null): void {
+  static function create_issue(int $project_id, string $title, string $description, IssueStatus $status, IssuePriority $priority, int $issuer, ?int $assignee = null): void {
     if (empty($project_id)) {
       throw new \Exception('Project ID is required');
     }
@@ -98,7 +98,11 @@ class IssueModel {
 
   static function get_issue(int $issue_id): IssueModel {
     $result = DatabaseManager::instance()->query(
-      "SELECT * FROM issue WHERE issue_id = :issue_id",
+      "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+      FROM issue as i
+      LEFT JOIN user as u1 ON i.assignee = u1.user_id
+      LEFT JOIN user as u2 ON i.issuer = u2.user_id
+      WHERE issue_id = :issue_id",
       ['issue_id' => $issue_id]
     )->fetch(PDO::FETCH_ASSOC);
 
@@ -121,7 +125,10 @@ class IssueModel {
   }
 
   static function get_all_issues(?bool $sort_newest = null): array {
-    $query = "SELECT * FROM issue";
+    $query = "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+              FROM issue as i
+              LEFT JOIN user as u1 ON i.assignee = u1.user_id
+              LEFT JOIN user as u2 ON i.issuer = u2.user_id";
     if ($sort_newest != null) {
       $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
     }
@@ -136,8 +143,8 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee'],
-        issuer: $issue['issuer'],
+        assignee: $issue['assignee_name'],
+        issuer: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );
@@ -148,8 +155,11 @@ class IssueModel {
 
   static function get_issues(int $project_id): array {
     $result = DatabaseManager::instance()->query(
-      "SELECT i.*, u1.username as assignee, u2.username as issuer FROM issue as i, user as u1, user as u2
-      WHERE i.assignee = u1.user_id AND i.issuer = u2.user_id AND i.project_id = :project_id",
+      "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+      FROM issue as i
+      LEFT JOIN user as u1 ON i.assignee = u1.user_id
+      LEFT JOIN user as u2 ON i.issuer = u2.user_id
+      WHERE i.project_id = :project_id",
       ['project_id' => $project_id]
     )->fetchAll();
 
@@ -162,8 +172,8 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee'],
-        issuer: $issue['issuer'],
+        assignee: $issue['assignee_name'],
+        issuer: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated']
       );
@@ -193,7 +203,11 @@ class IssueModel {
 
   static function filter_issues(IssueStatus $filter) {
     $result = DatabaseManager::instance()->query(
-      "SELECT * FROM issue WHERE status = :status",
+      "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+      FROM issue as i
+      LEFT JOIN user as u1 ON i.assignee = u1.user_id
+      LEFT JOIN user as u2 ON i.issuer = u2.user_id
+      WHERE i.status = :status",
       ['status' => $filter->name]
     )->fetchAll();
 
@@ -206,8 +220,8 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee'],
-        issuer: $issue['issuer'],
+        assignee: $issue['assignee_name'],
+        issuer: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );
@@ -216,14 +230,24 @@ class IssueModel {
     return $issues;
   }
 
-  static function get_created_issues(int $user_id, ?bool $sort_newest = null): array {
-    $query = "SELECT * FROM issue WHERE issuer = :user_id";
+  static function get_created_issues(int $user_id, ?bool $sort_newest = null, ?string $filter_status = null): array {
+    $query = "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+              FROM issue as i
+              LEFT JOIN user as u1 ON i.assignee = u1.user_id
+              LEFT JOIN user as u2 ON i.issuer = u2.user_id
+              WHERE i.issuer = :user_id";
+    if ($filter_status != null) {
+      $query .= " AND i.status = :status";
+    }
     if ($sort_newest != null) {
       $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
     }
     $result = DatabaseManager::instance()->query(
       $query,
-      ['user_id' => $user_id]
+      array_filter([
+        'user_id' => $user_id,
+        'status' => $filter_status,
+      ], fn($e) => $e !== null)
     )->fetchAll();
 
     $issues = [];
@@ -235,8 +259,8 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee'],
-        issuer: $issue['issuer'],
+        assignee: $issue['assignee_name'],
+        issuer: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );
@@ -245,14 +269,24 @@ class IssueModel {
     return $issues;
   }
 
-  static function get_assigned_issues(int $user_id, ?bool $sort_newest = null): array {
-    $query = "SELECT * FROM issue WHERE assignee = :user_id";
+  static function get_assigned_issues(int $user_id, ?bool $sort_newest = null, ?string $filter_status = null): array {
+    $query = "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+              FROM issue as i
+              LEFT JOIN user as u1 ON i.assignee = u1.user_id
+              LEFT JOIN user as u2 ON i.issuer = u2.user_id
+              WHERE assignee = :user_id";
+    if ($filter_status != null) {
+      $query .= " AND i.status = :status";
+    }
     if ($sort_newest != null) {
       $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
     }
     $result = DatabaseManager::instance()->query(
       $query,
-      ['user_id' => $user_id]
+      array_filter([
+        'user_id' => $user_id,
+        'status' => $filter_status,
+      ], fn($e) => $e !== null)
     )->fetchAll();
 
     $issues = [];
@@ -264,8 +298,8 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee'],
-        issuer: $issue['issuer'],
+        assignee: $issue['assignee_name'],
+        issuer: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );

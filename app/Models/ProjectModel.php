@@ -59,7 +59,42 @@ class ProjectModel {
     );
   }
 
+  static function get_all_projects(?int $user_id = null): array {
+    $p = [];
+    if ($user_id != null) {
+      $p = self::get_owned_projects($user_id);
+      array_push($p, ...self::get_joined_projects($user_id));
+      return array_unique($p, SORT_REGULAR);
+    }
+
+    $res = DatabaseManager::instance()->query(
+      "SELECT p.project_id, p.project_name, p.`description`, p.date_created, p.owner as owner_id, u.username as owner, COUNT(i.issue_id) as issue_count
+        FROM project as p
+        JOIN user as u ON p.owner = u.user_id
+        LEFT JOIN issue as i ON p.project_id = i.project_id
+        GROUP BY p.project_id, p.project_name, p.`description`, p.date_created, u.username"
+    )->fetchAll();
+
+    foreach ($res as $project) {
+      $p[] = new ProjectModel(
+        project_id: $project['project_id'],
+        project_name: $project['project_name'],
+        description: $project['description'],
+        date_created: $project['date_created'],
+        owner_id: $project['owner_id'],
+        owner: $project['owner'],
+        issue_count: $project['issue_count'],
+      );
+    }
+
+    return $p;
+  }
+
   static function get_owned_projects(?int $owner = null): array {
+    if ($owner == null) {
+      return [];
+    }
+
     $query = "SELECT p.project_id, p.project_name, p.`description`, p.date_created, p.owner as owner_id, u.username as owner, COUNT(i.issue_id) as issue_count
               FROM project as p
               JOIN user as u ON p.owner = u.user_id
@@ -88,7 +123,7 @@ class ProjectModel {
     return $projects;
   }
 
-  static function get_joined_projects(?int $user_id): array {
+  static function get_joined_projects(?int $user_id = null): array {
     if ($user_id == null) {
       return [];
     }

@@ -16,9 +16,7 @@ class ProjectController extends BaseController {
     }
     $user_id = $is_admin ? null : $_COOKIE['user_id'];
 
-    $p = ProjectModel::get_owned_projects($user_id);
-    array_push($p, ...ProjectModel::get_joined_projects($user_id));
-    // $p = array_unique($p, SORT_REGULAR); // filter duplicated project_id
+    $p = ProjectModel::get_all_projects($user_id);
 
     if (isset($_GET['p'])) {
       $p = array_filter($p, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['p'])));
