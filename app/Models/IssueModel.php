@@ -135,10 +135,16 @@ class IssueModel {
               FROM issue as i
               LEFT JOIN user as u1 ON i.assignee = u1.user_id
               LEFT JOIN user as u2 ON i.issuer = u2.user_id";
+    $query .= Helper::is_admin() ? ''
+      : " INNER JOIN project_role as r ON i.project_id = r.project_id
+              WHERE r.user_id = :current_user_id";
     if ($sort_newest != null) {
       $query .= $sort_newest === true ? " ORDER BY date_created DESC" : " ORDER BY date_created ASC";
     }
-    $result = DatabaseManager::instance()->query($query)->fetchAll();
+    $result = DatabaseManager::instance()->query(
+      $query,
+      Helper::is_admin() ? [] : ['current_user_id' => $_COOKIE['user_id']]
+    )->fetchAll();
 
     $issues = [];
     foreach ($result as $issue) {
@@ -193,11 +199,19 @@ class IssueModel {
   }
 
   static function issue_type_count(): array {
-    $statuses = IssueStatus::cases();
+    $query = "SELECT i.status, COUNT(*) as count
+              FROM issue as i";
+    $query .= Helper::is_admin()
+      ? " GROUP BY i.status"
+      : " INNER JOIN project_role as r ON i.project_id = r.project_id
+        WHERE r.user_id = :current_user_id
+        GROUP BY i.status";
     $result = DatabaseManager::instance()->query(
-      "SELECT status, COUNT(*) as count FROM issue GROUP BY status"
+      $query,
+      Helper::is_admin() ? [] : ['current_user_id' => $_COOKIE['user_id']]
     )->fetchAll();
 
+    $statuses = IssueStatus::cases();
     $issue_count = [];
     foreach ($statuses as $v) {
       $issue_count[$v->name] = 0;
@@ -212,13 +226,19 @@ class IssueModel {
   }
 
   static function filter_issues(IssueStatus $filter) {
+    $query = "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+        FROM issue as i
+        LEFT JOIN user as u1 ON i.assignee = u1.user_id
+        LEFT JOIN user as u2 ON i.issuer = u2.user_id";
+    $query .= Helper::is_admin()
+      ? " WHERE i.status = :status"
+      : " INNER JOIN project_role as r ON i.project_id = r.project_id
+        WHERE i.status = :status AND r.user_id = :current_user_id";
     $result = DatabaseManager::instance()->query(
-      "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
-      FROM issue as i
-      LEFT JOIN user as u1 ON i.assignee = u1.user_id
-      LEFT JOIN user as u2 ON i.issuer = u2.user_id
-      WHERE i.status = :status",
-      ['status' => $filter->name]
+      $query,
+      Helper::is_admin()
+      ? ['status' => $filter->name]
+      : ['status' => $filter->name, 'current_user_id' => $_COOKIE['user_id']]
     )->fetchAll();
 
     $issues = [];

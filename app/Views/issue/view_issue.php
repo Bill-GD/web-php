@@ -2,6 +2,7 @@
 use App\Helpers\Helper;
 use App\Models\IssueStatus;
 use App\Models\IssuePriority;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,8 +35,10 @@ use App\Models\IssuePriority;
         <h3><?= $issue->title ?></h3>
         <div class="d-flex">
           <div class="d-flex justify-content-around me-3 align-items-center">
-            <span class="badge <?= Helper::get_status_badge_color($issue->status) ?> me-2"><?= ucfirst($issue->status->name) ?></span>
-            <span class="badge <?= Helper::get_priority_badge_color($issue->priority) ?>"><?= ucfirst($issue->priority->name) ?></span>
+            <span
+              class="badge <?= Helper::get_status_badge_color($issue->status) ?> me-2"><?= ucfirst($issue->status->name) ?></span>
+            <span
+              class="badge <?= Helper::get_priority_badge_color($issue->priority) ?>"><?= ucfirst($issue->priority->name) ?></span>
           </div>
           <span class="text-dark-light">
             <?= $issue->issuer_name ?> opened this issue on
@@ -59,24 +62,26 @@ use App\Models\IssuePriority;
             echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
           } ?>
           <form action="/public/projects/<?= $project_id ?>/issues/<?= $issue->issue_id ?>/update-issue" method="post">
-            <div class="form-group">
-              <h6 class="justify-content-start d-flex">Assignee</h6>
-              <select class="form-select bg-dark-light border-dark-subtle text-white" name="issue_assignee">
-                <?php
-                foreach ($members as $member) {
-                  $selected = $issue->assignee === $member['user_id'] ? 'selected' : '';
-                  echo "<option value='{$member['user_id']}' {$selected}>
+            <?php if ($is_viewer_owner) { ?>
+              <div class="form-group mb-3">
+                <h6 class="justify-content-start d-flex">Assignee</h6>
+                <select class="form-select bg-dark-light border-dark-subtle text-white" name="issue_assignee">
+                  <?php
+                  foreach ($members as $member) {
+                    $selected = $issue->assignee === $member['user_id'] ? 'selected' : '';
+                    echo "<option value='{$member['user_id']}' {$selected}>
                 <img src='" . Helper::get_profile_picture_url($member['avatar_url']) . "'>
                 {$member['username']}
                 </option>";
-                }
-                if ($issue->assignee === null) {
-                  echo "<option value='null' selected>Unassigned</option>";
-                }
-                ?>
-              </select>
-            </div>
-            <div class="form-group mt-3">
+                  }
+                  if ($issue->assignee === null) {
+                    echo "<option value='null' selected>Unassigned</option>";
+                  }
+                  ?>
+                </select>
+              </div>
+            <?php } ?>
+            <div class="form-group mb-3">
               <h6 class="justify-content-start d-flex">Priority</h6>
               <select class="form-select bg-dark-light border-dark-subtle text-white" name="issue_priority">
                 <?php
@@ -87,7 +92,7 @@ use App\Models\IssuePriority;
                 ?>
               </select>
             </div>
-            <div class="form-group mt-3">
+            <div class="form-group">
               <h6 class="justify-content-start d-flex">Status</h6>
               <select class="form-select bg-dark-light border-dark-subtle text-white" name="issue_status">
                 <?php

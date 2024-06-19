@@ -117,12 +117,13 @@ class IssueController extends BaseController {
 
     $issue = IssueModel::get_issue($project_id, $issue_id);
     $issuer = UserModel::find_user(user_id: $issue->issuer);
-    $assignee = $issue->assignee ? UserModel::find_user(user_id: $issue->assignee) : null;
+    // $assignee = $issue->assignee ? UserModel::find_user(user_id: $issue->assignee) : null;
 
     $data = [
       'issue' => $issue,
       'project_id' => $project_id,
       'project' => ProjectModel::get_project($project_id),
+      'is_viewer_owner' => ProjectModel::is_member_owner($project_id, $_COOKIE['user_id']),
       'issuer_avatar' => Helper::get_profile_picture_url($issuer->avatar_url),
       'members' => ProjectModel::get_members($project_id),
     ];

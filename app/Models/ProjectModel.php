@@ -247,6 +247,15 @@ class ProjectModel {
     return $res['user_role'] === ProjectRole::owner->name;
   }
 
+  static function is_user_member(int $project_id, int $user_id): bool {
+    $res = DatabaseManager::instance()->query(
+      "SELECT user_id FROM project_role WHERE project_id = :project_id AND user_id = :user_id",
+      ['project_id' => $project_id, 'user_id' => $user_id]
+    )->fetch();
+
+    return $res != null;
+  }
+
   static function delete_project(int $project_id): void {
     DatabaseManager::instance()->query(
       "call delete_project(:project_id)",

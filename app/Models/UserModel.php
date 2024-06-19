@@ -104,11 +104,11 @@ class UserModel {
 
     $hashed_password = md5($password);
     [$email, $username] = DatabaseManager::mysql_escape([$email, $username]);
-    $github_access_token = isset($_COOKIE['github_access_token']) ? self::encode_gh_token($_COOKIE['github_access_token']) : null;
+    $github_access_token = isset($_COOKIE['github_access_token']) ? "'" . self::encode_gh_token($_COOKIE['github_access_token']) . "'" : 'NULL';
     $current_time = Helper::get_local_time();
 
     $q_str = "INSERT INTO `user` (email, username, `password`, avatar_url, is_admin, date_created, github_access_token) VALUES
-    ('{$email}', '{$username}', '{$hashed_password}', '{$avatar_url}', " . ($is_admin ? 1 : 0) . ", '{$current_time}', '{$github_access_token}')";
+    ('{$email}', '{$username}', '{$hashed_password}', '{$avatar_url}', " . ($is_admin ? 1 : 0) . ", '{$current_time}', {$github_access_token})";
     DatabaseManager::instance()->query($q_str);
   }
 
@@ -171,7 +171,7 @@ class UserModel {
       $new_user->avatar_url = $user_data['avatar_url'];
       $new_user->is_admin = $user_data['is_admin'];
       $new_user->date_created = $user_data['date_created'];
-      $new_user->is_github_auth_user = $user_data['has_github_access_token'];
+      $new_user->is_github_auth_user = $user_data['has_github_access_token'] == 1;
       $users[] = $new_user;
     }
 
