@@ -1,6 +1,5 @@
 <?php
-use App\Models\IssueStatus;
-use App\Models\IssuePriority;
+use App\Helpers\Helper;
 
 $title = 'Issues';
 $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : ' - All');
@@ -54,20 +53,8 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           $issue_creator = $issue->issuer;
           $issue_assignee = $issue->assignee ? "assigned to {$issue->assignee}" : 'unassigned';
 
-          $issue_status_color = match ($issue_status) {
-            IssueStatus::open => 'bg-success',
-            IssueStatus::cancelled => 'text-bg-info',
-            IssueStatus::pending => 'text-bg-warning',
-            IssueStatus::tested => 'text-bg-primary',
-            IssueStatus::closed => 'text-bg-dark',
-          };
-
-          // colors for priority as well
-          $issue_priority_color = match ($issue_priority) {
-            IssuePriority::low => 'bg-success',
-            IssuePriority::mid => 'bg-warning',
-            IssuePriority::high => 'bg-danger',
-          };
+          $issue_status_color = Helper::get_status_badge_color($issue_status);
+          $issue_priority_color = Helper::get_priority_badge_color($issue_priority);
 
           $i++;
           $b = $i < count($issues) - 1 ? 'border-bottom border-dark-subtle' : '';

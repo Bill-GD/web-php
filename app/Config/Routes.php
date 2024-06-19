@@ -32,7 +32,8 @@ $routes->get('projects/(:num)/delete', 'ProjectController::delete_project/$1');
 
 $routes->get('projects/(:num)/create-issue', 'IssueController::create/$1');
 $routes->post('projects/(:num)/create-new-issue', 'IssueController::create_issue/$1');
-$routes->get('projects/(:num)/issues/(:num)', 'IssueController::view_issue/$2');
+$routes->get('projects/(:num)/issues/(:num)', 'IssueController::view_issue/$1/$2');
+$routes->post('projects/(:num)/issues/(:num)/update-issue', 'IssueController::update_issue/$1/$2');
 
 $routes->get('issues', 'IssueController::index');
 $routes->get('issues/(created|assigned)', 'IssueController::filter/$1');

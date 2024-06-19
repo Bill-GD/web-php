@@ -58,13 +58,14 @@ use App\Models\IssueStatus;
               </div>
               <div class="form-group mt-3 row w-40 align-items-center">
                 <h5 class="col-2">Project</h5>
-                <select class="form-select bg-dark-light text-white ms-4 col w-100">
+                <select class="form-select bg-dark-light border-dark-subtle text-white ms-4 col w-100">
                   <option><?= $project_name ?></option>
                 </select>
               </div>
               <div class="form-group mt-3 row w-40">
                 <h5 class="col-2">Priority</h5>
-                <select class="form-select bg-dark-light text-white ms-4 col w-100" name="issue_priority">
+                <select class="form-select bg-dark-light border-dark-subtle text-white ms-4 col w-100"
+                  name="issue_priority">
                   <?php
                   foreach (IssuePriority::cases() as $priority) {
                     echo "<option value='{$priority->name}'>" . ucfirst($priority->name) . "</option>";

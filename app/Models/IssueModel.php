@@ -12,12 +12,14 @@ class IssueModel {
   public string $description;
   public IssueStatus $status;
   public IssuePriority $priority;
-  public ?string $issuer;
-  public ?string $assignee;
+  public ?int $issuer;
+  public ?string $issuer_name;
+  public ?int $assignee;
+  public ?string $assignee_name;
   public string $date_created;
   public string $date_updated;
 
-  private function __construct(int $issue_id, int $project_id, string $title, string $description, IssueStatus $status, IssuePriority $priority, ?string $assignee, string $issuer, string $date_created, string $date_updated) {
+  private function __construct(int $issue_id, int $project_id, string $title, string $description, IssueStatus $status, IssuePriority $priority, ?int $assignee, ?string $assignee_name, ?int $issuer, ?string $issuer_name, string $date_created, string $date_updated) {
     $this->issue_id = $issue_id;
     $this->project_id = $project_id;
     $this->title = $title;
@@ -26,6 +28,8 @@ class IssueModel {
     $this->priority = $priority;
     $this->assignee = $assignee;
     $this->issuer = $issuer;
+    $this->assignee_name = $assignee_name;
+    $this->issuer_name = $issuer_name;
     $this->date_created = $date_created;
     $this->date_updated = $date_updated;
   }
@@ -96,14 +100,14 @@ class IssueModel {
     );
   }
 
-  static function get_issue(int $issue_id): IssueModel {
+  static function get_issue(int $project_id, int $issue_id): IssueModel {
     $result = DatabaseManager::instance()->query(
-      "SELECT i.*, u1.username as assignee_name, u2.username as issuer_name
+      "SELECT i.*, u1.username as assignee_name, u1.avatar_url as assignee_avatar, u2.username as issuer_name, u2.avatar_url as issuer_avatar
       FROM issue as i
       LEFT JOIN user as u1 ON i.assignee = u1.user_id
       LEFT JOIN user as u2 ON i.issuer = u2.user_id
-      WHERE issue_id = :issue_id",
-      ['issue_id' => $issue_id]
+      WHERE issue_id = :issue_id AND project_id = :project_id",
+      ['issue_id' => $issue_id, 'project_id' => $project_id],
     )->fetch(PDO::FETCH_ASSOC);
 
     if (!$result) {
@@ -111,16 +115,18 @@ class IssueModel {
     }
 
     return new IssueModel(
-      $result['issue_id'],
-      $result['project_id'],
-      $result['title'],
-      $result['description'],
-      IssueStatus::from($result['status']),
-      IssuePriority::from($result['priority']),
-      $result['assignee'],
-      $result['issuer'],
-      $result['date_created'],
-      $result['date_updated'],
+      issue_id: $result['issue_id'],
+      project_id: $result['project_id'],
+      title: $result['title'],
+      description: $result['description'],
+      status: IssueStatus::from($result['status']),
+      priority: IssuePriority::from($result['priority']),
+      assignee: $result['assignee'],
+      assignee_name: $result['assignee_name'],
+      issuer: $result['issuer'],
+      issuer_name: $result['issuer_name'],
+      date_created: $result['date_created'],
+      date_updated: $result['date_updated'],
     );
   }
 
@@ -143,8 +149,10 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee_name'],
-        issuer: $issue['issuer_name'],
+        issuer: $issue['issuer'],
+        assignee: $issue['assignee'],
+        assignee_name: $issue['assignee_name'],
+        issuer_name: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );
@@ -172,8 +180,10 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee_name'],
-        issuer: $issue['issuer_name'],
+        assignee: $issue['assignee'],
+        issuer: $issue['issuer'],
+        assignee_name: $issue['assignee_name'],
+        issuer_name: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated']
       );
@@ -220,8 +230,10 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee_name'],
-        issuer: $issue['issuer_name'],
+        assignee: $issue['assignee'],
+        issuer: $issue['issuer'],
+        assignee_name: $issue['assignee_name'],
+        issuer_name: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );
@@ -259,8 +271,10 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee_name'],
-        issuer: $issue['issuer_name'],
+        assignee: $issue['assignee'],
+        issuer: $issue['issuer'],
+        assignee_name: $issue['assignee_name'],
+        issuer_name: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );
@@ -298,8 +312,10 @@ class IssueModel {
         description: $issue['description'],
         status: IssueStatus::from($issue['status']),
         priority: IssuePriority::from($issue['priority']),
-        assignee: $issue['assignee_name'],
-        issuer: $issue['issuer_name'],
+        assignee: $issue['assignee'],
+        issuer: $issue['issuer'],
+        assignee_name: $issue['assignee_name'],
+        issuer_name: $issue['issuer_name'],
         date_created: $issue['date_created'],
         date_updated: $issue['date_updated'],
       );

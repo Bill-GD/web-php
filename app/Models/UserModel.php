@@ -152,6 +152,7 @@ class UserModel {
     $new_user->email = $res['email'];
     $new_user->username = $res['username'];
     $new_user->is_admin = $res['is_admin'];
+    $new_user->avatar_url = $res['avatar_url'];
     return $new_user;
   }
 

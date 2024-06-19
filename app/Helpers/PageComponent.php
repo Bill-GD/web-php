@@ -41,7 +41,7 @@ class PageComponent {
       </div>
     HTML;
   }
-  
+
   static function table_with_header(string $table_classes = '', string $header, string $content): string {
     return <<<HTML
       <div class="border border-dark-subtle rounded-2 ' . $table_classes . '">
@@ -79,9 +79,9 @@ class PageComponent {
 
     $links = [
       // title => [href, enabled, is_active]
-      'Projects' => ['/public/projects', true, str_contains($access_uri, 'projects')],
-      'Issues' => ['/public/issues', true, str_contains($access_uri, 'issues')],
-      'Profiles' => ['/public/profiles', Helper::is_admin(), str_contains($access_uri, 'profiles')],
+      'Projects' => ['/public/projects', true, str_contains($access_uri, 'public/projects')],
+      'Issues' => ['/public/issues', true, str_contains($access_uri, 'public/issues')],
+      'Profiles' => ['/public/profiles', Helper::is_admin(), str_contains($access_uri, 'public/profiles')],
     ];
 
     $nav_links = '';

@@ -82,13 +82,16 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                   $date_created = date_format($date_created, 'H:i M d, Y');
                   $date_updated = date_create($issue->date_updated);
                   $date_updated = date_format($date_updated, 'H:i M d, Y');
+
+                  $assignee = $issue->assignee ? $issue->assignee : 'Unassigned';
+
                   $content = <<<HTML
                     <div class="pt-1 pb-2 ps-4">
-                      <a class="link-deco-hover fs-3" href="/public/projects/{$project_id}/issues/$issue->issue_id">{$issue->title}</a>
+                      <a class="link-deco-hover fs-3" href="/public/projects/$project_id/issues/$issue->issue_id">{$issue->title}</a>
                       <div class="text-dark-light fs-5">{$issue->description}</div>
                       <div class="text-dark-light">
                         <i class="fa-solid fa-user-pen text-dark-light"></i>  {$issue->issuer}
-                        <i class="fa-solid fa-user-tag text-dark-light ms-3"></i>  {$issue->assignee}
+                        <i class="fa-solid fa-user-tag text-dark-light ms-3"></i>  $assignee
                         <br>
                         <i class="fa-solid fa-clock text-dark-light"></i> Created: {$date_created}
                         <i class="fa-regular fa-clock text-dark-light"></i> Updated: {$date_updated}
@@ -116,7 +119,7 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                   placeholder="Enter email">
               </div>
               <div class="col-auto">
-                <select class="form-select bg-dark-light text-white h-100" name="new_member_role">
+                <select class="form-select bg-dark-light border-dark-subtle text-white h-100" name="new_member_role">
                   <?php
                   $roles = array_filter(ProjectRole::cases(), fn(ProjectRole $role) => $role !== ProjectRole::owner);
                   foreach ($roles as $role) {

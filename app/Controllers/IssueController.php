@@ -6,6 +6,7 @@ use App\Models\IssueModel;
 use App\Models\IssuePriority;
 use App\Models\IssueStatus;
 use App\Models\ProjectModel;
+use App\Models\UserModel;
 
 class IssueController extends BaseController {
   public function index(): string {
@@ -109,5 +110,37 @@ class IssueController extends BaseController {
     Helper::redirect_to("/projects/{$project_id}");
   }
 
-  
+  public function view_issue(int $project_id, int $issue_id): string {
+    $issue = IssueModel::get_issue($project_id, $issue_id);
+    $issuer = UserModel::find_user(user_id: $issue->issuer);
+    $assignee = $issue->assignee ? UserModel::find_user(user_id: $issue->assignee) : null;
+
+    $data = [
+      'issue' => $issue,
+      'project_id' => $project_id,
+      'project' => ProjectModel::get_project($project_id),
+      'issuer_avatar' => Helper::get_profile_picture_url($issuer->avatar_url),
+      'members' => ProjectModel::get_members($project_id),
+    ];
+
+    return view('issue/view_issue', $data);
+  }
+
+  public function update_issue(int $project_id, int $issue_id): void {
+    try {
+      $assignee = $_POST['issue_assignee'] === 'null' ? null : $_POST['issue_assignee'];
+      $priority = IssuePriority::from($_POST['issue_priority']);
+      $status = IssueStatus::from($_POST['issue_status']);
+
+      IssueModel::update_issue(
+        issue_id: $issue_id,
+        assignee: $assignee,
+        priority: $priority,
+        status: $status,
+      );
+    } catch (\Exception $e) {
+      Helper::redirect_to("/projects/{$project_id}/issues/{$issue_id}?error_message=" . urlencode($e->getMessage()));
+    }
+    Helper::redirect_to("/projects/{$project_id}/issues/{$issue_id}");
+  }
 }

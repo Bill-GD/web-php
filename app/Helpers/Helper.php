@@ -2,6 +2,8 @@
 namespace App\Helpers;
 
 use App\Helpers\Globals;
+use App\Models\IssueStatus;
+use App\Models\IssuePriority;
 
 class Helper {
   static function redirect_to(string $route): void {
@@ -28,6 +30,23 @@ class Helper {
     $relative_path[0] !== '/' ? $relative_path = "/{$relative_path}" : 0;
     $is_prod = Globals::$environment === 'production';
     return ($is_prod ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $relative_path;
+  }
+
+  static function get_status_badge_color(IssueStatus $status): string {
+    return match ($status) {
+      IssueStatus::open => 'bg-success',
+      IssueStatus::cancelled => 'text-bg-info',
+      IssueStatus::pending => 'text-bg-warning',
+      IssueStatus::tested => 'text-bg-primary',
+      IssueStatus::closed => 'bg-purple',
+    };
+  }
+  static function get_priority_badge_color(IssuePriority $priority): string {
+    return match ($priority) {
+      IssuePriority::low => 'bg-success',
+      IssuePriority::mid => 'bg-warning',
+      IssuePriority::high => 'bg-danger',
+    };
   }
 
   static function is_logged_in(): bool {

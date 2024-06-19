@@ -86,6 +86,9 @@
 .bg-image {
   opacity: 0.3;
 }
+.bg-purple {
+  background-color: var(--fg-purple-light) !important;
+}
 
 /* form */
 .form-label {
@@ -114,22 +117,6 @@
 .svg-white {
   fill: #fff;
   color: #fff;
-}
-.svg-dark-light {
-  fill: var(--fg-dark-light);
-  color: var(--fg-dark-light);
-}
-.svg-green {
-  fill: var(--fg-green-light);
-  color: var(--fg-green-light);
-}
-.svg-red {
-  fill: var(--fg-red-light);
-  color: var(--fg-red-light);
-}
-.svg-purple {
-  fill: var(--fg-purple-light);
-  color: var(--fg-purple-light);
 }
 
 /* width */
