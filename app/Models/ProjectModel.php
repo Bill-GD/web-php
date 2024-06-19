@@ -19,7 +19,7 @@ class ProjectModel {
     string $project_name,
     string $description,
     string $date_created,
-    ?int $owner_id = null,
+    int $owner_id,
     string $owner,
     int $issue_count,
   ) {
@@ -60,7 +60,7 @@ class ProjectModel {
   }
 
   static function get_owned_projects(?int $owner = null): array {
-    $query = "SELECT p.project_id, p.project_name, p.`description`, p.date_created, u.username as owner, COUNT(i.issue_id) as issue_count
+    $query = "SELECT p.project_id, p.project_name, p.`description`, p.date_created, p.owner as owner_id, u.username as owner, COUNT(i.issue_id) as issue_count
               FROM project as p
               JOIN user as u ON p.owner = u.user_id
               LEFT JOIN issue as i ON p.project_id = i.project_id
@@ -80,6 +80,7 @@ class ProjectModel {
         project_name: $project['project_name'],
         description: $project['description'],
         date_created: $project['date_created'],
+        owner_id: $project['owner_id'],
         owner: $project['owner'],
         issue_count: $project['issue_count'],
       );
@@ -113,6 +114,7 @@ class ProjectModel {
         project_name: $project['project_name'],
         description: $project['description'],
         date_created: $project['date_created'],
+        owner_id: $project['owner'],
         owner: $project['owner_name'],
         issue_count: $project['issue_count'],
       );
@@ -135,13 +137,13 @@ class ProjectModel {
       throw new \Exception('Project not found');
     }
     return new ProjectModel(
-      $res['project_id'],
-      $res['project_name'],
-      $res['description'],
-      $res['date_created'],
-      $res['owner_id'],
-      $res['owner'],
-      $res['issue_count'],
+      project_id: $res['project_id'],
+      project_name: $res['project_name'],
+      description: $res['description'],
+      date_created: $res['date_created'],
+      owner_id: $res['owner_id'],
+      owner: $res['owner'],
+      issue_count: $res['issue_count'],
     );
   }
 

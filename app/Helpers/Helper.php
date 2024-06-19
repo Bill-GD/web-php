@@ -14,6 +14,9 @@ class Helper {
     exit;
   }
 
+  /**
+   * @return string Local time in `Y-m-d H:i:s` format, timezone is 'Asia/Ho_Chi_Minh'
+   */
   static function get_local_time() {
     return (new \DateTime('now', new \DateTimeZone('Asia/Ho_Chi_Minh')))->format('Y-m-d H:i:s');
   }

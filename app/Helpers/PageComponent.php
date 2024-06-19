@@ -43,7 +43,7 @@ class PageComponent {
     return <<<HTML
       <div class="border border-dark-subtle rounded-2 ' . $table_classes . '">
         <div class="bg-dark-light p-3 border-bottom rounded-top-2 border-dark-subtle">
-          <div class="d-flex">$header</div>
+          $header
         </div>
         <div class="d-flex flex-column m-6 align-items-center justify-content-center">
           $content

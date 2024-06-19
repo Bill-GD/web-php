@@ -32,7 +32,7 @@ create table if not exists issue (
   project_id int not null,
   title varchar(100) not null,
   `description` text not null,
-  `status` varchar(10) not null, -- error, cancelled, pending, tested, closed
+  `status` varchar(10) not null, -- open, cancelled, pending, tested, closed
   priority varchar(5) not null, -- high, mid, low
   assignee int, -- user_id, null -> empty
   `issuer` int, -- user_id, null -> empty
