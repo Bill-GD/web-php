@@ -10,16 +10,15 @@ use App\Models\UserModel;
 
 class IssueController extends BaseController {
   public function index(): string {
+    if (!Helper::is_logged_in()) {
+      Helper::redirect_to('/');
+    }
+    
     if (isset($_GET['s'])) {
       return $this->filter_status($_GET['s']);
     }
 
-    $is_logged_in = Helper::is_logged_in();
-    $data = ['is_logged_in' => $is_logged_in];
-
-    if (!$is_logged_in) {
-      Helper::redirect_to('/');
-    }
+    $data = [];
 
     $data['issue_count'] = IssueModel::issue_type_count();
     $i = [];
@@ -39,12 +38,11 @@ class IssueController extends BaseController {
   }
 
   public function filter(string $filter): string {
-    $is_logged_in = Helper::is_logged_in();
-    $data = ['is_logged_in' => $is_logged_in];
-
-    if (!$is_logged_in) {
+    if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
+    
+    $data = [];
     $params = [
       $_COOKIE['user_id'],
       !isset($_GET['t']) ? null : ($_GET['t'] === 'newest' ? true : false),
@@ -65,12 +63,11 @@ class IssueController extends BaseController {
   }
 
   public function filter_status(string $status): string {
-    $is_logged_in = Helper::is_logged_in();
-    $data = ['is_logged_in' => $is_logged_in];
-
-    if (!$is_logged_in) {
+    if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
+    
+    $data = [];
 
     $data['issue_count'] = IssueModel::issue_type_count();
     $data['issues'] = IssueModel::filter_issues(IssueStatus::from($status));
@@ -80,6 +77,9 @@ class IssueController extends BaseController {
   }
 
   public function create(int $project_id): string {
+    if (Helper::is_admin()) {
+      Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot create issues'));
+    }
     $data = [
       'issuer_id' => $_COOKIE['user_id'],
       'issuer_name' => $_COOKIE['username'],
@@ -111,6 +111,10 @@ class IssueController extends BaseController {
   }
 
   public function view_issue(int $project_id, int $issue_id): string {
+    if (Helper::is_admin()) {
+      Helper::redirect_to('/issues?error_message=' . urlencode('Admins cannot view issues'));
+    }
+
     $issue = IssueModel::get_issue($project_id, $issue_id);
     $issuer = UserModel::find_user(user_id: $issue->issuer);
     $assignee = $issue->assignee ? UserModel::find_user(user_id: $issue->assignee) : null;
@@ -127,6 +131,10 @@ class IssueController extends BaseController {
   }
 
   public function update_issue(int $project_id, int $issue_id): void {
+    if (Helper::is_admin()) {
+      Helper::redirect_to('/issues?error_message=' . urlencode('Admins cannot update issues'));
+    }
+
     try {
       $assignee = $_POST['issue_assignee'] === 'null' ? null : $_POST['issue_assignee'];
       $priority = IssuePriority::from($_POST['issue_priority']);
