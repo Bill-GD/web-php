@@ -36,13 +36,14 @@ use App\Models\IssuePriority;
         <div class="d-flex">
           <div class="d-flex justify-content-around me-3 align-items-center">
             <span
-              class="badge <?= Helper::get_status_badge_color($issue->status) ?> me-2"><?= ucfirst($issue->status->name) ?></span>
+              class="badge px-2 py-2 <?= Helper::get_status_badge_classes($issue->status) ?> me-2"><?= ucfirst($issue->status->name) ?></span>
             <span
-              class="badge <?= Helper::get_priority_badge_color($issue->priority) ?>"><?= ucfirst($issue->priority->name) ?></span>
+              class="badge px-2 py-2 <?= Helper::get_priority_badge_classes($issue->priority) ?>"><?= ucfirst($issue->priority->name) ?></span>
           </div>
-          <span class="text-dark-light">
+          <span class="d-flex text-dark-light align-items-center">
             <?= $issue->issuer_name ?> opened this issue on
-            <?= date_format(date_create($issue->date_created), 'M d, Y') ?>
+            <?= date_format(date_create($issue->date_created), 'M d, Y') ?>,
+            <?= $issue->assignee_name ? "assigned to {$issue->assignee_name}" : 'unassigned' ?>
           </span>
         </div>
       </div>

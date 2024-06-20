@@ -71,10 +71,14 @@ class ProjectController extends BaseController {
     if (Helper::is_admin()) {
       Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot view project'));
     }
-    $data = [
-      'project_id' => $project_id,
-      'project' => ProjectModel::get_project($project_id),
-    ];
+    
+    $data = [];
+    try {
+      $data['project_id'] = $project_id;
+      $data['project'] = ProjectModel::get_project($project_id);
+    } catch (\Exception $e) {
+      Helper::redirect_to("/projects?error_message=" . urlencode($e->getMessage()));
+    }
 
     if (!$tab) {
       $data['issues'] = IssueModel::get_issues($project_id);

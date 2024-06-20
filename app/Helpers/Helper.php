@@ -32,20 +32,20 @@ class Helper {
     return ($is_prod ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $relative_path;
   }
 
-  static function get_status_badge_color(IssueStatus $status): string {
+  static function get_status_badge_classes(IssueStatus $status): string {
     return match ($status) {
-      IssueStatus::open => 'bg-success',
-      IssueStatus::cancelled => 'bg-info',
-      IssueStatus::pending => 'bg-warning',
-      IssueStatus::tested => 'bg-primary',
-      IssueStatus::closed => 'bg-purple',
+      IssueStatus::open => 'border border-success bg-success-subtle',
+      IssueStatus::cancelled => 'border border-info bg-info-subtle',
+      IssueStatus::pending => 'border border-warning bg-warning-subtle',
+      IssueStatus::tested => 'border border-primary bg-primary-subtle',
+      IssueStatus::closed => 'border border-purple bg-purple-subtle',
     };
   }
-  static function get_priority_badge_color(IssuePriority $priority): string {
+  static function get_priority_badge_classes(IssuePriority $priority): string {
     return match ($priority) {
-      IssuePriority::low => 'bg-success',
-      IssuePriority::mid => 'bg-warning',
-      IssuePriority::high => 'bg-danger',
+      IssuePriority::low => 'border border-success bg-success-subtle',
+      IssuePriority::mid => 'border border-warning bg-warning-subtle',
+      IssuePriority::high => 'border border-danger bg-danger-subtle',
     };
   }
 
@@ -92,7 +92,7 @@ class Helper {
       assert(str_contains($user_pfp, 'assets'), 'User profile picture should be in assets folder, got ' . $user_pfp);
       $user_pfp = Helper::get_resource_path($user_pfp);
     }
-    
+
     return $user_pfp;
   }
 

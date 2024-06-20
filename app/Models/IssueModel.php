@@ -42,7 +42,10 @@ class IssueModel {
       throw new \Exception('Title and description are required');
     }
     if (strlen($title) > 100) {
-      throw new \Exception('Title must be less than 100 characters');
+      throw new \Exception('Title must be at most 100 characters');
+    }
+    if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9-_]*$/', $title)) {
+      throw new \Exception('Title must start with a letter or underscore and contain only letters, numbers, underscores and dashes');
     }
     if (empty($issuer)) {
       throw new \Exception('Issuer is required');
@@ -88,6 +91,9 @@ class IssueModel {
     $query .= " WHERE issue_id = :issue_id";
 
     if ($title) {
+      if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9-_]*$/', $title)) {
+        throw new \Exception('Title must start with a letter or underscore and contain only letters, numbers, underscores and dashes');
+      }
       $fields['title'] = DatabaseManager::mysql_escape($title);
     }
     if ($description) {

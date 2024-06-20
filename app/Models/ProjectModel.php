@@ -39,8 +39,8 @@ class ProjectModel {
     if (strlen($project_name) > 50) {
       throw new \Exception('Project name must be less than 50 characters');
     }
-    if (!preg_match("/^[a-zA-Z0-9 _-]*$/", $project_name)) {
-      throw new \Exception('Only letters, numbers, white space, underscore, hyphen allowed in project name');
+    if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9 _-]*$/", $project_name)) {
+      throw new \Exception('Allowed characters: letter, number, whitespace, underscore, dash <br> Project name mustn\'t start with a number');
     }
 
     [$project_name, $description] = DatabaseManager::mysql_escape([$project_name, $description]);
@@ -244,7 +244,11 @@ class ProjectModel {
       ['project_id' => $project_id, 'user_id' => $user_id]
     )->fetch();
 
-    return $res['user_role'] === ProjectRole::owner->name;
+    if (!$res) {
+      return false;
+    }
+
+    return ProjectRole::from($res['user_role']) === ProjectRole::owner;
   }
 
   static function is_user_member(int $project_id, int $user_id): bool {

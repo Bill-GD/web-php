@@ -4,6 +4,12 @@
   --fg-green-light: #00bb2c;
   --fg-red-light: #ff2f40;
   --fg-purple-light: #a57af0;
+  --bg-green-subtle: #09301e;
+  --bg-pruple-subtle: #2f0f2f;
+  --bg-yellow-subtle: #3f3f0f;
+  --bg-blue-subtle: #031633;
+  --bg-cyan-subtle: #032830;
+  --bg-red-subtle: #3f0f0f;
   --bg-dark: #010409;
   --bg-dark-subtle: #0d1117;
   --bg-dark-light: #161b22;
@@ -55,6 +61,15 @@
 .border-dark-light {
   border-color: var(--fg-dark-light) !important;
 }
+.border-purple {
+  border-color: var(--fg-purple-light) !important;
+}
+.border-success {
+  border-color: var(--fg-green-light) !important;
+}
+.border-danger {
+  border-color: var(--fg-red-light) !important;
+}
 
 /* button */
 .btn {
@@ -88,6 +103,24 @@
 }
 .bg-purple {
   background-color: var(--fg-purple-light) !important;
+}
+.bg-success-subtle {
+  background-color: var(--bg-green-subtle) !important;
+}
+.bg-purple-subtle {
+  background-color: var(--bg-pruple-subtle) !important;
+}
+.bg-warning-subtle {
+  background-color: var(--bg-yellow-subtle) !important;
+}
+.bg-primary-subtle {
+  background-color: var(--bg-blue-subtle) !important;
+}
+.bg-info-subtle {
+  background-color: var(--bg-cyan-subtle) !important;
+}
+.bg-danger-subtle {
+  background-color: var(--bg-red-subtle) !important;
 }
 
 /* form */
@@ -132,10 +165,7 @@
   margin: 6rem !important;
 }
 
-/* footer */
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+/* flex */
+.flex-auto {
+  flex: auto !important;
 }
-

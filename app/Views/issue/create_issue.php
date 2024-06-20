@@ -10,7 +10,6 @@ use App\Models\IssueStatus;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?= PageComponent::import_styles() ?>
-    <link rel="stylesheet" href="<?= App\Helpers\Helper::get_resource_path('public/style/error_style.css') ?>">
     <title>Create Issue</title>
   </head>
 
@@ -32,13 +31,12 @@ use App\Models\IssueStatus;
         </div>
       HTML
     ) ?>
-    <div class="clearfix mt-4 container">
+    <div class="clearfix mt-5 container">
       <form action="create-new-issue" accept-charset="UTF-8" method="post">
         <div class="row">
-          <div class="col-auto">
+          <div class="col-auto d-flex flex-column align-items-center">
             <img src="<?= $issuer_avatar ?>" title="<?= $issuer_name ?>" class="rounded-5 float-left" width="40px"
               height="40px">
-            <br>
             <span class="text-white"><?= $issuer_name ?></span>
           </div>
           <div class="col">
@@ -48,7 +46,7 @@ use App\Models\IssueStatus;
               } ?>
               <div class="form-group mb-3">
                 <h5>Add a title</h5>
-                <input type="text" name="issue_title" class="form-control form-input bg-dark-light" placeholder="Title"
+                <input type="text" class="form-control form-input bg-dark-light" placeholder="Title"
                   required>
               </div>
               <div class="form-group">

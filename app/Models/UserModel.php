@@ -85,6 +85,9 @@ class UserModel {
     if ($res->rowCount() > 0 || !$res) {
       throw new \Exception('Email already exists');
     }
+    if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9-_]*$/', $username)) {
+      throw new \Exception('Username must start with a letter or underscore and contain only letters, numbers, underscores and dashes');
+    }
     $res = DatabaseManager::instance()->query("SELECT * FROM `user` WHERE username = '{$username}'");
     if ($res->rowCount() > 0 || !$res) {
       throw new \Exception('Username already exists');

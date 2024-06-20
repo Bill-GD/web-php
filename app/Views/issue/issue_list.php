@@ -10,7 +10,6 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?= App\Helpers\PageComponent::import_styles() ?>
-    <link rel="stylesheet" href="<?= App\Helpers\Helper::get_resource_path('public/style/error_style.css') ?>">
     <title><?= $title ?></title>
   </head>
   <body class="bg-dark-subtle text-white">
@@ -51,20 +50,22 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
           $issue_creator = $issue->issuer_name;
           $issue_assignee = $issue->assignee ? "assigned to {$issue->assignee_name}" : 'unassigned';
 
-          $issue_status_color = Helper::get_status_badge_color($issue_status);
-          $issue_priority_color = Helper::get_priority_badge_color($issue_priority);
+          $issue_status_color = Helper::get_status_badge_classes($issue_status);
+          $issue_priority_color = Helper::get_priority_badge_classes($issue_priority);
 
           $i++;
           $b = $i < count($issues) - 1 ? 'border-bottom border-dark-subtle' : '';
+          $status = ucfirst($issue_status->name);
+          $priority = ucfirst($issue_priority->name);
 
           $issue_list .= <<<HTML
             <div class="$b px-4 py-2">
-              <div class="d-flex">
-                <div class="d-flex flex-column justify-content-around me-3">
-                  <span class="badge $issue_status_color">$issue_status->name</span>
-                  <span class="badge $issue_priority_color">$issue_priority->name</span>
+              <div class="row">
+                <div class="col-1 d-flex flex-column justify-content-evenly me-1">
+                  <span class="badge p-1 $issue_status_color">$status</span>
+                  <span class="badge p-1 $issue_priority_color">$priority</span>
                 </div>
-                <div class="d-flex flex-column">
+                <div class="col-auto d-flex flex-column">
                   <a class="link-deco-hover fs-4" href="/public/projects/{$issue->project_id}/issues/$issue_id">$issue_title</a>
                   <div class="text-dark-light">
                     opened on $issue_created_at by $issue_creator, $issue_assignee

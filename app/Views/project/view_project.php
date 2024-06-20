@@ -164,10 +164,8 @@ $is_viewer_owner = App\Models\ProjectModel::is_member_owner($project_id, $_COOKI
                               <!-- <button type="button" class="btn-close"></button> -->
                             </div>
                             <div class="modal-body">
-                              Are you sure you want to remove user
+                              Are you sure you want to remove member
                               <span class="text-primary">{$member['username']}</span> from this project?
-                              <br>
-                              This is irreversible and all data will be lost.
                             </div>
                             <div class="modal-footer border-0">
                               <a role="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>

@@ -13,7 +13,7 @@ class IssueController extends BaseController {
     if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
-    
+
     if (isset($_GET['s'])) {
       return $this->filter_status($_GET['s']);
     }
@@ -41,7 +41,7 @@ class IssueController extends BaseController {
     if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
-    
+
     $data = [];
     $params = [
       $_COOKIE['user_id'],
@@ -66,7 +66,7 @@ class IssueController extends BaseController {
     if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
-    
+
     $data = [];
 
     $data['issue_count'] = IssueModel::issue_type_count();
@@ -80,13 +80,17 @@ class IssueController extends BaseController {
     if (Helper::is_admin()) {
       Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot create issues'));
     }
-    $data = [
-      'issuer_id' => $_COOKIE['user_id'],
-      'issuer_name' => $_COOKIE['username'],
-      'issuer_avatar' => Helper::get_profile_picture_url($_COOKIE['avatar_url']),
-      'project_id' => $project_id,
-      'project_name' => ProjectModel::get_project($project_id)->project_name,
-    ];
+
+    $data = [];
+    try {
+      $data['issuer_id'] = $_COOKIE['user_id'];
+      $data['issuer_name'] = $_COOKIE['username'];
+      $data['issuer_avatar'] = Helper::get_profile_picture_url($_COOKIE['avatar_url']);
+      $data['project_id'] = $project_id;
+      $data['project_name'] = ProjectModel::get_project($project_id)->project_name;
+    } catch (\Exception $e) {
+      Helper::redirect_to("/projects?error_message=" . urlencode($e->getMessage()));
+    }
     return view('issue/create_issue', $data);
   }
 
@@ -115,18 +119,21 @@ class IssueController extends BaseController {
       Helper::redirect_to('/issues?error_message=' . urlencode('Admins cannot view issues'));
     }
 
-    $issue = IssueModel::get_issue($project_id, $issue_id);
-    $issuer = UserModel::find_user(user_id: $issue->issuer);
-    // $assignee = $issue->assignee ? UserModel::find_user(user_id: $issue->assignee) : null;
+    $data = [];
+    try {
+      $issue = IssueModel::get_issue($project_id, $issue_id);
+      $issuer = UserModel::find_user(user_id: $issue->issuer);
+      // $assignee = $issue->assignee ? UserModel::find_user(user_id: $issue->assignee) : null;
 
-    $data = [
-      'issue' => $issue,
-      'project_id' => $project_id,
-      'project' => ProjectModel::get_project($project_id),
-      'is_viewer_owner' => ProjectModel::is_member_owner($project_id, $_COOKIE['user_id']),
-      'issuer_avatar' => Helper::get_profile_picture_url($issuer->avatar_url),
-      'members' => ProjectModel::get_members($project_id),
-    ];
+      $data['issue'] = $issue;
+      $data['project_id'] = $project_id;
+      $data['project'] = ProjectModel::get_project($project_id);
+      $data['is_viewer_owner'] = ProjectModel::is_member_owner($project_id, $_COOKIE['user_id']);
+      $data['issuer_avatar'] = Helper::get_profile_picture_url($issuer->avatar_url);
+      $data['members'] = ProjectModel::get_members($project_id);
+    } catch (\Exception $e) {
+      Helper::redirect_to("/issues?error_message=" . urlencode($e->getMessage()));
+    }
 
     return view('issue/view_issue', $data);
   }
