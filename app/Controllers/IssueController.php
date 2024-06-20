@@ -29,7 +29,7 @@ class IssueController extends BaseController {
       $i = IssueModel::get_all_issues();
 
       if (isset($_GET['i'])) {
-        $i = array_filter($i, fn($project) => str_contains(strtolower($project->project_name), strtolower($_GET['i'])));
+        $i = array_filter($i, fn($i) => str_contains(strtolower($i->title), strtolower($_GET['i'])));
       }
     }
 
