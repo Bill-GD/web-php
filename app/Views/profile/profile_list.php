@@ -11,6 +11,9 @@
       <?php if (isset($_GET['error_message'])) {
         echo App\Helpers\PageComponent::alert_danger($_REQUEST['error_message']);
       } ?>
+      <div class="border border-dark-subtle rounded-2 text-white text-center pt-3 pb-2">
+        <h4>Account count: <?= $profile_count ?></h4>
+      </div>
       <div class="mt-3 border border-dark-subtle rounded-2">
         <?php
         assert(isset($profiles) & is_array($profiles), 'profiles must be an array');

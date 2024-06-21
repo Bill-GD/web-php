@@ -12,7 +12,10 @@ class Profile extends BaseController {
     if (!Helper::is_admin()) {
       Helper::redirect_to('/projects');
     }
-    $data = ['profiles' => UserModel::get_all_users()];
+    $data = [
+      'profiles' => UserModel::get_all_users(),
+      'profile_count' => UserModel::user_count(),
+    ];
     return view('profile/profile_list', $data);
   }
 

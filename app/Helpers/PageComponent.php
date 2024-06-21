@@ -107,6 +107,7 @@ class PageComponent {
         '<li><hr class="dropdown-divider"></li>',
         '<li><a class="dropdown-item disabled" href="#">Profile</a></li>',
         '<li><a class="dropdown-item disabled" href="#">Settings</a></li>',
+        '<li><a class="dropdown-item" target="blank" href="https://github.com/Bill-GD/web-php">Source Code</a></li>',
         '<li><hr class="dropdown-divider"></li>',
         '<li><a class="dropdown-item" href="/public/logout">Logout</a></li>',
       ],

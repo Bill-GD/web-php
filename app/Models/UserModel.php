@@ -128,6 +128,10 @@ class UserModel {
     );
   }
 
+  static function user_count(): int {
+    return (int) DatabaseManager::instance()->query("SELECT COUNT(*) FROM `user`")->fetch()['COUNT(*)'];
+  }
+
   static function find_user(?int $user_id = null, ?string $email = null, ?string $username = null): ?UserModel {
     if (empty($user_id) && empty($email) && empty($username)) {
       throw new \Exception('User ID, email or username is required');

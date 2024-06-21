@@ -20,6 +20,8 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
       } ?>
       <div class="d-flex mt-3">
         <div class="input-group me-2" style="max-width:fit-content;min-width:fit-content;">
+          <a href="/public/issues" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
+            role="button">All (<?= $issue_count['all'] ?>)</a>
           <a href="/public/issues/created" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
             role="button">Created</a>
           <a href="/public/issues/assigned" class="btn btn-dark bg-dark-subtle fw-medium border border-dark-subtle"
@@ -107,7 +109,7 @@ $title .= isset($_GET['p']) ? ' - Search' : (isset($filter) ? " - {$filter}" : '
               Newest
             </a>',
             '<a class="dropdown-item" href="?t=oldest">
-              <i class="fa-solid fa-check' . (str_contains($_SERVER['REQUEST_URI'], 'oldest') ? '' : ' invisible') . '"></i>
+              <i class="fa-solid fa-check' . (!str_contains($_SERVER['REQUEST_URI'], 'newest') ? '' : ' invisible') . '"></i>
               Oldest
             </a>'
           ],
