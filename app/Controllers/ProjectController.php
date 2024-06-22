@@ -68,9 +68,9 @@ class ProjectController extends BaseController {
     if (!Helper::is_logged_in()) {
       Helper::redirect_to('/');
     }
-    if (Helper::is_admin()) {
-      Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot view project'));
-    }
+    // if (Helper::is_admin()) {
+    //   Helper::redirect_to('/projects?error_message=' . urlencode('Admins cannot view project'));
+    // }
     
     $data = [];
     try {

@@ -115,9 +115,9 @@ class IssueController extends BaseController {
   }
 
   public function view_issue(int $project_id, int $issue_id): string {
-    if (Helper::is_admin()) {
-      Helper::redirect_to('/issues?error_message=' . urlencode('Admins cannot view issues'));
-    }
+    // if (Helper::is_admin()) {
+    //   Helper::redirect_to('/issues?error_message=' . urlencode('Admins cannot view issues'));
+    // }
 
     $data = [];
     try {
